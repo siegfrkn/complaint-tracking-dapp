@@ -4,10 +4,12 @@ App = {
   account: '0x0',
   complaintSubmitted: false,
 
+  // initialize the app
   init: function() {
     return App.initWeb3();
   },
 
+  // Initialize the web3 object
   initWeb3: async function() {
     // Modern dapp browsers...
     if (window.ethereum) {
@@ -33,6 +35,7 @@ App = {
     return App.initContract();
   },
 
+  // Initialize the contract object
   initContract: function() {
     $.getJSON("Complaint.json", function(complaint) {
       // Instantiate a new truffle contract from the artifact
@@ -64,11 +67,13 @@ App = {
     });
   },
 
+  // Render the application
   render: function() {
     var complaintInstance;
     var loader = $("#loader");
     var content = $("#content");
 
+    // don't show content until it has all be fetched
     loader.show();
     content.hide();
 
@@ -100,50 +105,31 @@ App = {
         const promise1 = complaintInstance.getName(i).then(function(name)
         {
           retrievedName = name;
-          // console.log("Retrieve the name");
-          // console.log(retrievedName);
         });
         const promise2 = complaintInstance.getId(i).then(function(id)
         {
           retrievedId = id.toNumber();
-          // console.log("Retrieve the id");
-          // console.log(retrievedId);
         });
         Promise.all([promise1, promise2]).then((results) => {
-          // now fetch the data
-          // console.log(promise1);
-          // console.log(promise2);
-          // console.log("Fetch the id");
-          // console.log(retrievedId);
-          // console.log("Fetch the name");
-          // console.log(retrievedName);
-          // Render candidate Result
           var entryTemplate = "<tr><th>" + retrievedId + "</th><td>" + retrievedName + "</td><td>"
-          // console.log(entryTemplate);
           entriesResults.append(entryTemplate);
-
-          // Render candidate ballot option
-          // var entryOption = "<option value='" + retrievedId + "' >" + retrievedName + "</ option>"
-          // entriesSelect.append(entryOption);
         });
-          // console.log('Results: ${results}');
       }
-    //   return complaintInstance.authors(App.account); // TODO Remove this logic
-    // }).then(function() {
+      // Once the data has loaded show the content
       loader.hide();
       content.show();
+    // If the data hasn't loaded pass a warning
     }).catch(function(error) {
       console.warn(error);
     });
   },
 
+  // Submit complaint data to the contract
   submitComplaint: function() {
     console.log("Calling submitComplaint");
     console.log(web3.currentProvider.selectedAddress);
     address = userAddress = web3.currentProvider.selectedAddress;
-    console.log(address);
     var nameInput = $('#name').val();
-    console.log('Metadata for user: ', App.account)
     App.contracts.Complaint.deployed().then(function(instance) {
       return instance.addComplaintEntry(nameInput
                               , 2468
@@ -165,6 +151,7 @@ App = {
   }
 };
 
+// Initialize the app once the window loads
 $(function() {
   $(window).load(function() {
     App.init();
