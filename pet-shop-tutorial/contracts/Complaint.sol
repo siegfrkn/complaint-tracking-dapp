@@ -14,11 +14,14 @@ contract Complaint {
         string description;
         uint impact; // 0 = observation, 1 = low, 2 = moderate, 3 = high, 4 = SAFETY
     }
+    // Store accounts that have logged complaints
+    mapping(address => bool) public authors;
     // Store entry
     // Fetch entry
     mapping(uint => Entry) public entries;
     // Store entry count
     uint public entriesCount;
+
     // Constructor
     constructor () public {
         addEntry("Complaint 1"

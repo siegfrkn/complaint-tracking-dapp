@@ -1,26 +1,11 @@
 App = {
   web3Provider: null,
   contracts: {},
+  account: '0x0',
+  complaintSubmitted: false,
 
-  init: async function() {
-    // Load pets.
-    $.getJSON('../pets.json', function(data) {
-      var petsRow = $('#petsRow');
-      var petTemplate = $('#petTemplate');
-
-      for (i = 0; i < data.length; i ++) {
-        petTemplate.find('.panel-title').text(data[i].name);
-        petTemplate.find('img').attr('src', data[i].picture);
-        petTemplate.find('.pet-breed').text(data[i].breed);
-        petTemplate.find('.pet-age').text(data[i].age);
-        petTemplate.find('.pet-location').text(data[i].location);
-        petTemplate.find('.btn-adopt').attr('data-id', data[i].id);
-
-        petsRow.append(petTemplate.html());
-      }
-    });
-
-    return await App.initWeb3();
+  init: function() {
+    return App.initWeb3();
   },
 
   initWeb3: async function() {
@@ -49,70 +34,117 @@ App = {
   },
 
   initContract: function() {
-    $.getJSON('Adoption.json', function(data) {
-      // Get the necessary contract artifact file and instantiate it with @truffle/contract
-      var AdoptionArtifact = data;
-      App.contracts.Adoption = TruffleContract(AdoptionArtifact);
-    
-      // Set the provider for our contract
-      App.contracts.Adoption.setProvider(App.web3Provider);
-    
-      // Use our contract to retrieve and mark the adopted pets
-      return App.markAdopted();
+    $.getJSON("Complaint.json", function(complaint) {
+      // Instantiate a new truffle contract from the artifact
+      App.contracts.Complaint = TruffleContract(complaint);
+      // Connect provider to interact with contract
+      App.contracts.Complaint.setProvider(App.web3Provider);
+
+      App.listenForEvents();
+
+      return App.render();
+    });
+  },
+
+  // Listen for events emitted from the contract
+  listenForEvents: function() {
+    App.contracts.Complaint.deployed().then(function(instance) {
+      // Restart Chrome if you are unable to receive this event
+      // This is a known issue with Metamask
+      // https://github.com/MetaMask/metamask-extension/issues/2393
+      // instance.votedEvent({}, {
+      //   fromBlock: 0,
+      //   toBlock: 'latest'
+      // }).watch(function(error, event) {
+      //   console.log("event triggered", event)
+      //   // Reload when a new vote is recorded
+      //   App.render();
+      // });
+    });
+  },
+
+  render: function() {
+    var complaintInstance;
+    var loader = $("#loader");
+    var content = $("#content");
+
+    loader.show();
+    content.hide();
+
+    // Load account data
+    web3.eth.getCoinbase(function(err, account) {
+      if (err === null) {
+        App.account = account;
+        $("#accountAddress").html("Your Account: " + account);
+      }
     });
 
-    return App.bindEvents();
-  },
+    // Load contract data
+    App.contracts.Complaint.deployed().then(function(instance) {
+      complaintInstance = instance;
+      return complaintInstance.entriesCount();
+    }).then(function(entriesCount) {
+      var entriesResults = $("#entriesResults");
+      entriesResults.empty();
 
-  bindEvents: function() {
-    $(document).on('click', '.btn-adopt', App.handleAdopt);
-  },
+      var entriesSelect = $('#entriesSelect');
+      entriesSelect.empty();
 
-  markAdopted: function() {
-    var adoptionInstance;
+      for (var i = 1; i <= entriesCount; i++) {
+        complaintInstance.entries(i).then(function(entry) {
+          var id = entry[0];
+          var name = entry[1];
 
-    App.contracts.Adoption.deployed().then(function(instance) {
-      adoptionInstance = instance;
+          // Render candidate Result
+          var entryTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>"
+          entriesResults.append(entryTemplate);
 
-      return adoptionInstance.getAdopters.call();
-    }).then(function(adopters) {
-      for (i = 0; i < adopters.length; i++) {
-        if (adopters[i] !== '0x0000000000000000000000000000000000000000') {
-          $('.panel-pet').eq(i).find('button').text('Success').attr('disabled', true);
-        }
+          // Render candidate ballot option
+          var entryOption = "<option value='" + id + "' >" + name + "</ option>"
+          entriesSelect.append(entryOption);
+        });
       }
+      return complaintInstance.authors(App.account);
+    }).then(function(complaintSubmitted) {
+      loader.hide();
+      content.show();
+    }).catch(function(error) {
+      console.warn(error);
+    });
+  },
+
+  submitComplaint: function() {
+    // const nameInput = document.getElementById("name").value
+    // alert(nameInput)
+    // console.log(nameInput)
+    // App.contracts.Complaint.addEntry(nameInput
+    // , 0
+    // , 0
+    // , 3
+    // , "0xF0b16e178270FE7E0d42dA2151ef99ba5a50b6Cc"
+    // , 12345
+    // , "Disposable kit lure failure"
+    // , 3);
+
+    var nameInput = $('#name').val();
+    App.contracts.Complaint.deployed().then(function(instance) {
+      return instance.addEntry(nameInput
+                              , 0
+                              , 0
+                              , 3
+                              , "0xF0b16e178270FE7E0d42dA2151ef99ba5a50b6Cc"
+                              , 12345
+                              , "Disposable kit lure failure"
+                              , 3
+                              , { from: App.account });
+    }).then(function(result) {
+      // Wait for votes to update
+      $("#content").hide();
+      $("#loader").show();
     }).catch(function(err) {
-      console.log(err.message);
-    });
-  },
-
-  handleAdopt: function(event) {
-    event.preventDefault();
-
-    var petId = parseInt($(event.target).data('id'));
-
-    var adoptionInstance;
-
-    web3.eth.getAccounts(function(error, accounts) {
-      if (error) {
-        console.log(error);
-      }
-
-      var account = accounts[0];
-
-      App.contracts.Adoption.deployed().then(function(instance) {
-        adoptionInstance = instance;
-
-        // Execute adopt as a transaction by sending account
-        return adoptionInstance.adopt(petId, {from: account});
-      }).then(function(result) {
-        return App.markAdopted();
-      }).catch(function(err) {
-        console.log(err.message);
-      });
+      console.error(err);
     });
   }
-
 };
 
 $(function() {
