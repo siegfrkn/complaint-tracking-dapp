@@ -82,15 +82,19 @@ App = {
     // Load contract data
     App.contracts.Complaint.deployed().then(function(instance) {
       complaintInstance = instance;
-      return complaintInstance.entriesCount();
+      return complaintInstance.getEntriesCount();
     }).then(function(entriesCount) {
+
       var entriesResults = $("#entriesResults");
       entriesResults.empty();
 
       var entriesSelect = $('#entriesSelect');
       entriesSelect.empty();
 
-      for (var i = 1; i <= entriesCount; i++) {
+      console.log(entriesCount);
+      currentCount = entriesCount.toNumber();
+      console.log(currentCount);
+      for (var i = 1; i <= currentCount; i++) {
         complaintInstance.entries(i).then(function(entry) {
           var id = entry[0];
           var name = entry[1];
@@ -117,7 +121,7 @@ App = {
     // const nameInput = document.getElementById("name").value
     // alert(nameInput)
     // console.log(nameInput)
-    // App.contracts.Complaint.addEntry(nameInput
+    // App.contracts.Complaint.addComplaintEntry(nameInput
     // , 0
     // , 0
     // , 3
@@ -128,15 +132,14 @@ App = {
 
     var nameInput = $('#name').val();
     App.contracts.Complaint.deployed().then(function(instance) {
-      return instance.addEntry(nameInput
+      return instance.addComplaintEntry(nameInput
                               , 0
                               , 0
                               , 3
-                              , "0xF0b16e178270FE7E0d42dA2151ef99ba5a50b6Cc"
+                              , "0xF0b16e178270FE7E0d42dA2151ef99ba5a50b6Cc" // TODO: use msg.sender
                               , 12345
                               , "Disposable kit lure failure"
-                              , 3
-                              , { from: App.account });
+                              , 3);
     }).then(function(result) {
       // Wait for votes to update
       $("#content").hide();
