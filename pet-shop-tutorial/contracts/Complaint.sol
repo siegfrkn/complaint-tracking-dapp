@@ -26,7 +26,7 @@ contract Complaint {
 
     // submit event
     event submitEvent (
-        uint indexed _complaintId
+        address who
     );
 
     // Constructor
@@ -108,7 +108,7 @@ contract Complaint {
                      , _description
                      , _impact);
         // trigger a submit event
-        // emit submitEvent(entriesCount);
+        emit submitEvent(_reporter);
     }
 
     function getComplaint (uint complaintIndex) public view returns (complaintEntry memory) {

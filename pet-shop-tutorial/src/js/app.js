@@ -128,8 +128,8 @@ App = {
         });
           // console.log('Results: ${results}');
       }
-      return complaintInstance.authors(App.account); // TODO Remove this logic
-    }).then(function(complaintSubmitted) {
+    //   return complaintInstance.authors(App.account); // TODO Remove this logic
+    // }).then(function() {
       loader.hide();
       content.show();
     }).catch(function(error) {
@@ -154,8 +154,9 @@ App = {
                               , "Loop break"
                               , 3
                               , {from: App.account });
-    }).then(function(result) {
+    }).then(function() {
       // Wait for complaints to update
+      console.log("UPDATE COMPLAINTS");
       $("#content").hide();
       $("#loader").show();
     }).catch(function(err) {
