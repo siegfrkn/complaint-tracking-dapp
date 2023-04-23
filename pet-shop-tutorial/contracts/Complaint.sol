@@ -75,7 +75,6 @@ contract Complaint {
                      , uint _impact) public {
         entriesCount++;
         complaintEntry[] storage entryList = entries[entriesCount];
-        // _reporter = msg.sender;
         authors[_reporter];
         entryList.push(complaintEntry(entriesCount
                                     , _name
@@ -99,7 +98,14 @@ contract Complaint {
         thisComplaint  = getComplaint(complaintIndex);
         return thisComplaint.name;
     }
-    //app.getComplaintName(1).then(function(c) {complaintEntry = c; })
+    
+    function getId (uint complaintIndex) public view returns (uint) {
+        complaintEntry memory thisComplaint;
+        thisComplaint  = getComplaint(complaintIndex);
+        return thisComplaint.id;
+    }
+
+    //
     //complaintEntry["name"]
 
     // function printAllEntries () public {

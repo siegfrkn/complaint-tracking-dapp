@@ -91,23 +91,41 @@ App = {
       var entriesSelect = $('#entriesSelect');
       entriesSelect.empty();
 
-      console.log(entriesCount);
       currentCount = entriesCount.toNumber();
-      console.log(currentCount);
-      for (var i = 1; i <= currentCount; i++) {
-        complaintInstance.getName(i).then(function(name) {
-          // var id = entry[0];
-          var id;
-          // var name = entry[1];
-
+      for (var i = 1; i <= currentCount; i++)
+      {
+        var retrievedId;
+        var retrievedName;
+        const promise1 = complaintInstance.getName(i).then(function(name)
+        {
+          retrievedName = name;
+          // console.log("Retrieve the name");
+          // console.log(retrievedName);
+        });
+        const promise2 = complaintInstance.getId(i).then(function(id)
+        {
+          retrievedId = id.toNumber();
+          // console.log("Retrieve the id");
+          // console.log(retrievedId);
+        });
+        Promise.all([promise1, promise2]).then((results) => {
+          // now fetch the data
+          // console.log(promise1);
+          // console.log(promise2);
+          // console.log("Fetch the id");
+          // console.log(retrievedId);
+          // console.log("Fetch the name");
+          // console.log(retrievedName);
           // Render candidate Result
-          var entryTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>"
+          var entryTemplate = "<tr><th>" + retrievedId + "</th><td>" + retrievedName + "</td><td>"
+          // console.log(entryTemplate);
           entriesResults.append(entryTemplate);
 
           // Render candidate ballot option
-          var entryOption = "<option value='" + id + "' >" + name + "</ option>"
+          var entryOption = "<option value='" + retrievedId + "' >" + retrievedName + "</ option>"
           entriesSelect.append(entryOption);
         });
+          // console.log('Results: ${results}');
       }
       return complaintInstance.authors(App.account);
     }).then(function(complaintSubmitted) {
@@ -119,6 +137,8 @@ App = {
   },
 
   submitComplaint: function() {
+    console.log("Calling submitComplaint");
+    console.log(web3.currentProvider.selectedAddress);
     // const nameInput = document.getElementById("name").value
     // alert(nameInput)
     // console.log(nameInput)
@@ -130,24 +150,26 @@ App = {
     // , 12345
     // , "Disposable kit lure failure"
     // , 3);
-
+    address = userAddress = web3.currentProvider.selectedAddress;
+    console.log(address);
     var nameInput = $('#name').val();
-    App.contracts.Complaint.deployed().then(function(instance) {
-      return instance.addComplaintEntry(nameInput
-                              , 0
+    // App.contracts.Complaint.deployed().then(function(instance) {
+      complaintInstance.addComplaintEntry(nameInput
+      // return instance.addComplaintEntry(nameInput
+                              , 2468
                               , 0
                               , 3
-                              , "0xF0b16e178270FE7E0d42dA2151ef99ba5a50b6Cc" // TODO: use msg.sender
-                              , 12345
-                              , "Disposable kit lure failure"
+                              , address
+                              , 87654
+                              , "Loop break"
                               , 3);
-    }).then(function(result) {
-      // Wait for votes to update
-      $("#content").hide();
-      $("#loader").show();
-    }).catch(function(err) {
-      console.error(err);
-    });
+    // }).then(function(result) {
+    //   // Wait for votes to update
+    //   $("#content").hide();
+    //   $("#loader").show();
+    // }).catch(function(err) {
+    //   console.error(err);
+    // });
   }
 };
 
