@@ -9,13 +9,13 @@ contract Complaint {
         uint capa;
         uint entryType; // 0 = complaint, 1 = addition, 2 = closure
         uint product;
-        string reporter; // TODO: Change to address
+        address reporter;
         uint site;
         string description;
         uint impact; // 0 = observation, 1 = low, 2 = moderate, 3 = high, 4 = SAFETY
     }
     // Store accounts that have logged complaints
-    mapping(address => bool) public authors;
+    mapping(address => address) public authors;
     // Store entry
     // Fetch entry
     mapping(uint => Entry) public entries;
@@ -28,7 +28,7 @@ contract Complaint {
                , 0
                , 0
                , 3
-               , "0xF0b16e178270FE7E0d42dA2151ef99ba5a50b6Cc"
+               , 0xF0b16e178270FE7E0d42dA2151ef99ba5a50b6Cc
                , 12345
                , "Disposable kit lure failure"
                , 3);
@@ -36,7 +36,7 @@ contract Complaint {
                , 1
                , 1
                , 3
-               , "0xF0b16e178270FE7E0d42dA2151ef99ba5a50b6Cc"
+               , 0xF0b16e178270FE7E0d42dA2151ef99ba5a50b6Cc
                , 12345
                , "patient negatively impacted"
                , 4);
@@ -46,11 +46,13 @@ contract Complaint {
                      , uint _capa
                      , uint _entryType
                      , uint _product
-                     , string memory _reporter
+                     , address _reporter
                      , uint _site
                      , string memory _description
                      , uint _impact) public {
         entriesCount++;
+        _reporter = msg.sender;
+        authors[_reporter];
         entries[entriesCount] = Entry(entriesCount
                                     , _name
                                     , _capa
