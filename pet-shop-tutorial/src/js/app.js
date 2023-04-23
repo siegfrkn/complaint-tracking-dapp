@@ -49,17 +49,18 @@ App = {
   // Listen for events emitted from the contract
   listenForEvents: function() {
     App.contracts.Complaint.deployed().then(function(instance) {
+      console.log("contract event detected, rendering");
       // Restart Chrome if you are unable to receive this event
       // This is a known issue with Metamask
       // https://github.com/MetaMask/metamask-extension/issues/2393
-      // instance.votedEvent({}, {
-      //   fromBlock: 0,
-      //   toBlock: 'latest'
-      // }).watch(function(error, event) {
-      //   console.log("event triggered", event)
-      //   // Reload when a new vote is recorded
-      //   App.render();
-      // });
+      instance.submitEvent({}, {
+        fromBlock: 0,
+        toBlock: 'latest'
+      }).watch(function(error, event) {
+        console.log("event triggered", event)
+        // Reload when a new complaint is recorded
+        App.render();
+      });
     });
   },
 
@@ -122,12 +123,12 @@ App = {
           entriesResults.append(entryTemplate);
 
           // Render candidate ballot option
-          var entryOption = "<option value='" + retrievedId + "' >" + retrievedName + "</ option>"
-          entriesSelect.append(entryOption);
+          // var entryOption = "<option value='" + retrievedId + "' >" + retrievedName + "</ option>"
+          // entriesSelect.append(entryOption);
         });
           // console.log('Results: ${results}');
       }
-      return complaintInstance.authors(App.account);
+      return complaintInstance.authors(App.account); // TODO Remove this logic
     }).then(function(complaintSubmitted) {
       loader.hide();
       content.show();
@@ -139,37 +140,27 @@ App = {
   submitComplaint: function() {
     console.log("Calling submitComplaint");
     console.log(web3.currentProvider.selectedAddress);
-    // const nameInput = document.getElementById("name").value
-    // alert(nameInput)
-    // console.log(nameInput)
-    // App.contracts.Complaint.addComplaintEntry(nameInput
-    // , 0
-    // , 0
-    // , 3
-    // , "0xF0b16e178270FE7E0d42dA2151ef99ba5a50b6Cc"
-    // , 12345
-    // , "Disposable kit lure failure"
-    // , 3);
     address = userAddress = web3.currentProvider.selectedAddress;
     console.log(address);
     var nameInput = $('#name').val();
-    // App.contracts.Complaint.deployed().then(function(instance) {
-      complaintInstance.addComplaintEntry(nameInput
-      // return instance.addComplaintEntry(nameInput
+    console.log('Metadata for user: ', App.account)
+    App.contracts.Complaint.deployed().then(function(instance) {
+      return instance.addComplaintEntry(nameInput
                               , 2468
                               , 0
                               , 3
                               , address
                               , 87654
                               , "Loop break"
-                              , 3);
-    // }).then(function(result) {
-    //   // Wait for votes to update
-    //   $("#content").hide();
-    //   $("#loader").show();
-    // }).catch(function(err) {
-    //   console.error(err);
-    // });
+                              , 3
+                              , {from: App.account });
+    }).then(function(result) {
+      // Wait for complaints to update
+      $("#content").hide();
+      $("#loader").show();
+    }).catch(function(err) {
+      console.error(err);
+    });
   }
 };
 

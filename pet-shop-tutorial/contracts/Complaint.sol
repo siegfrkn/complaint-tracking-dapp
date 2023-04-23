@@ -24,8 +24,10 @@ contract Complaint {
     // Store entry count
     uint public entriesCount;
 
-    // idenify complaint author
-    // address author;
+    // submit event
+    event submitEvent (
+        uint indexed _complaintId
+    );
 
     // Constructor
     constructor () public {
@@ -86,6 +88,27 @@ contract Complaint {
                                     , _description
                                     , _impact));
         entriesIndex[entriesCount] = entryList.length - 1;
+    }
+
+    function submitComplaintEntry (string memory _name
+                     , uint _capa
+                     , uint _entryType
+                     , uint _product
+                     , address _reporter
+                     , uint _site
+                     , string memory _description
+                     , uint _impact) public {
+        // add new complaint
+        addComplaintEntry (_name
+                     , _capa
+                     , _entryType
+                     , _product
+                     , _reporter
+                     , _site
+                     , _description
+                     , _impact);
+        // trigger a submit event
+        // emit submitEvent(entriesCount);
     }
 
     function getComplaint (uint complaintIndex) public view returns (complaintEntry memory) {
