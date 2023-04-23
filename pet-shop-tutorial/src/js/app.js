@@ -95,9 +95,10 @@ App = {
       currentCount = entriesCount.toNumber();
       console.log(currentCount);
       for (var i = 1; i <= currentCount; i++) {
-        complaintInstance.entries(i).then(function(entry) {
-          var id = entry[0];
-          var name = entry[1];
+        complaintInstance.getName(i).then(function(name) {
+          // var id = entry[0];
+          var id;
+          // var name = entry[1];
 
           // Render candidate Result
           var entryTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>"
