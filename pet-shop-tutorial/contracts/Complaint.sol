@@ -17,7 +17,7 @@ contract Complaint {
         uint site;
         string description;
         uint impact; // 0 = observation, 1 = low, 2 = moderate, 3 = high, 4 = SAFETY
-        uint linkedComplaint;
+        int linkedComplaint;
     }
     // Store accounts that have logged complaints
     mapping(address => address) public authors;
@@ -77,10 +77,14 @@ contract Complaint {
                      , uint _site
                      , string memory _description
                      , uint _impact
-                     , uint _linkedComplaint) private {
+                     , int _linkedComplaint) private {
         entriesCount++;
         complaintEntry[] storage entryList = entries[entriesCount];
         authors[_reporter];
+        // check _linkedComplaint is valid
+
+        require(_linkedComplaint >= 0 && _linkedComplaint <= int(entriesCount), "Invalid Linked Complaint ID");
+        // add to chain
         entryList.push(complaintEntry(entriesCount
                                     , _name
                                     , _capa
@@ -103,10 +107,9 @@ contract Complaint {
                      , uint _site
                      , string memory _description
                      , uint _impact
-                     , uint _linkedComplaint) public {
+                     , int _linkedComplaint) public {
         // check _entryType is valid
         // check _impactType is valid
-        // check _linkedComplaint is valid
         // add new complaint
         addComplaintEntry (_name
                      , _capa
@@ -137,20 +140,16 @@ contract Complaint {
     // Get the id of a complaint entry with an index / id
     function getId (uint complaintIndex) public view returns (uint) {
         complaintEntry memory thisComplaint;
+        uint returnId = 0;
         thisComplaint  = getComplaint(complaintIndex);
+        returnId = thisComplaint.id;
         return thisComplaint.id;
     }
 
-    // TODO: complete function to print all linked Entries
-    function retrieveAllEntries () public  view returns (string[2][] memory) {
-        string[2][] memory results;
-        for (uint i = 1; i <= entriesCount; i++) {
-            complaintEntry memory thisComplaint;
-            thisComplaint  = getComplaint(i);
-            string memory thisName = thisComplaint.name;
-            string memory thisId = Strings.toString(thisComplaint.id);
-            results[i] = [thisId, thisName];
-        }
-        return results;
-    }
+    // // TODO: complete function to print all linked Entries
+    // function retrieveEntry () public  view returns (string[2][] memory) {
+    //             complaintEntry memory thisComplaint;
+    //     thisComplaint  = getComplaint(complaintIndex);
+    //     return results;
+    // }
 }
