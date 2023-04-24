@@ -1,5 +1,9 @@
 # TITLE HERE
 
+## Dependencies
+
+`npm install @openzeppelin/contracts`
+
 ## Building / Running
 
 `nvm list`

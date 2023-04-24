@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.5.0;
+pragma solidity >=0.8.19;
 pragma experimental ABIEncoderV2;
+
+import "@openzeppelin/contracts/utils/Strings.sol";
+// using Strings for uint256;
 
 contract Complaint {
     // Model a complaint
@@ -14,7 +17,7 @@ contract Complaint {
         uint site;
         string description;
         uint impact; // 0 = observation, 1 = low, 2 = moderate, 3 = high, 4 = SAFETY
-        // TODO: Add linked complaints
+        uint linkedComplaint;
     }
     // Store accounts that have logged complaints
     mapping(address => address) public authors;
@@ -38,7 +41,8 @@ contract Complaint {
                , 0xF0b16e178270FE7E0d42dA2151ef99ba5a50b6Cc
                , 12345
                , "Disposable kit lure failure"
-               , 3);
+               , 3
+               , 0);
         addComplaintEntry("Complaint 2"
                , 123
                , 1
@@ -46,7 +50,8 @@ contract Complaint {
                , 0xF0b16e178270FE7E0d42dA2151ef99ba5a50b6Cc
                , 12345
                , "patient negatively impacted"
-               , 4);
+               , 4
+               , 1);
         addComplaintEntry("Complaint 3"
                , 456
                , 0
@@ -54,7 +59,8 @@ contract Complaint {
                , 0xA6Eed187C878Bc44E88410367508E8Ba6Bcc246a
                , 78910
                , "broken pump door hinge"
-               , 1);
+               , 1
+               , 0);
     }
 
     // Get the current count of all complaints
@@ -70,7 +76,8 @@ contract Complaint {
                      , address _reporter
                      , uint _site
                      , string memory _description
-                     , uint _impact) public {
+                     , uint _impact
+                     , uint _linkedComplaint) private {
         entriesCount++;
         complaintEntry[] storage entryList = entries[entriesCount];
         authors[_reporter];
@@ -82,11 +89,12 @@ contract Complaint {
                                     , _reporter
                                     , _site
                                     , _description
-                                    , _impact));
+                                    , _impact
+                                    , _linkedComplaint));
         entriesIndex[entriesCount] = entryList.length - 1;
     }
 
-    // Add a complaint entry and trigger a submit event
+    // Add a complaint entry with checks and trigger a submit event
     function submitComplaintEntry (string memory _name
                      , uint _capa
                      , uint _entryType
@@ -94,7 +102,11 @@ contract Complaint {
                      , address _reporter
                      , uint _site
                      , string memory _description
-                     , uint _impact) public {
+                     , uint _impact
+                     , uint _linkedComplaint) public {
+        // check _entryType is valid
+        // check _impactType is valid
+        // check _linkedComplaint is valid
         // add new complaint
         addComplaintEntry (_name
                      , _capa
@@ -103,7 +115,8 @@ contract Complaint {
                      , _reporter
                      , _site
                      , _description
-                     , _impact);
+                     , _impact
+                     , _linkedComplaint);
         // trigger a submit event
         emit submitEvent(_reporter);
     }
@@ -129,10 +142,15 @@ contract Complaint {
     }
 
     // TODO: complete function to print all linked Entries
-    // function printAllEntries () public {
-    //     for (uint i = 1; i <= entriesCount; i++) {
-    //         string name = Complaint.entries[i][2];
-    //         console.log(name);
-    //     }
-    // }
+    function retrieveAllEntries () public  view returns (string[2][] memory) {
+        string[2][] memory results;
+        for (uint i = 1; i <= entriesCount; i++) {
+            complaintEntry memory thisComplaint;
+            thisComplaint  = getComplaint(i);
+            string memory thisName = thisComplaint.name;
+            string memory thisId = Strings.toString(thisComplaint.id);
+            results[i] = [thisId, thisName];
+        }
+        return results;
+    }
 }
