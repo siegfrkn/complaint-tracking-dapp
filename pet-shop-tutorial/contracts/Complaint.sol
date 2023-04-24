@@ -30,7 +30,7 @@ contract Complaint {
     );
 
     // Constructor, initialize with some faked complaint data
-    constructor () {
+    constructor () public {
         addComplaintEntry("Complaint 1"
                , 0
                , 0
