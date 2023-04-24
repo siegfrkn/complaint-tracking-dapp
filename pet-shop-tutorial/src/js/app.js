@@ -131,7 +131,7 @@ App = {
     address = userAddress = web3.currentProvider.selectedAddress;
     var nameInput = $('#name').val();
     App.contracts.Complaint.deployed().then(function(instance) {
-      return instance.addComplaintEntry(nameInput
+      return instance.submitComplaintEntry(nameInput
                               , 2468
                               , 0
                               , 3
@@ -139,6 +139,7 @@ App = {
                               , 87654
                               , "Loop break"
                               , 3
+                              , 0
                               , {from: App.account });
     }).then(function() {
       // Wait for complaints to update
