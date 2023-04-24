@@ -1,28 +1,15 @@
 App = {
   web3Provider: null,
   contracts: {},
+  account: '0x0',
+  complaintSubmitted: false,
 
-  init: async function() {
-    // Load pets.
-    $.getJSON('../pets.json', function(data) {
-      var petsRow = $('#petsRow');
-      var petTemplate = $('#petTemplate');
-
-      for (i = 0; i < data.length; i ++) {
-        petTemplate.find('.panel-title').text(data[i].name);
-        petTemplate.find('img').attr('src', data[i].picture);
-        petTemplate.find('.pet-breed').text(data[i].breed);
-        petTemplate.find('.pet-age').text(data[i].age);
-        petTemplate.find('.pet-location').text(data[i].location);
-        petTemplate.find('.btn-adopt').attr('data-id', data[i].id);
-
-        petsRow.append(petTemplate.html());
-      }
-    });
-
-    return await App.initWeb3();
+  // initialize the app
+  init: function() {
+    return App.initWeb3();
   },
 
+  // Initialize the web3 object
   initWeb3: async function() {
     // Modern dapp browsers...
     if (window.ethereum) {
@@ -48,73 +35,123 @@ App = {
     return App.initContract();
   },
 
+  // Initialize the contract object
   initContract: function() {
-    $.getJSON('Adoption.json', function(data) {
-      // Get the necessary contract artifact file and instantiate it with @truffle/contract
-      var AdoptionArtifact = data;
-      App.contracts.Adoption = TruffleContract(AdoptionArtifact);
-    
-      // Set the provider for our contract
-      App.contracts.Adoption.setProvider(App.web3Provider);
-    
-      // Use our contract to retrieve and mark the adopted pets
-      return App.markAdopted();
-    });
+    $.getJSON("Complaint.json", function(complaint) {
+      // Instantiate a new truffle contract from the artifact
+      App.contracts.Complaint = TruffleContract(complaint);
+      // Connect provider to interact with contract
+      App.contracts.Complaint.setProvider(App.web3Provider);
 
-    return App.bindEvents();
-  },
+      App.listenForEvents();
 
-  bindEvents: function() {
-    $(document).on('click', '.btn-adopt', App.handleAdopt);
-  },
-
-  markAdopted: function() {
-    var adoptionInstance;
-
-    App.contracts.Adoption.deployed().then(function(instance) {
-      adoptionInstance = instance;
-
-      return adoptionInstance.getAdopters.call();
-    }).then(function(adopters) {
-      for (i = 0; i < adopters.length; i++) {
-        if (adopters[i] !== '0x0000000000000000000000000000000000000000') {
-          $('.panel-pet').eq(i).find('button').text('Success').attr('disabled', true);
-        }
-      }
-    }).catch(function(err) {
-      console.log(err.message);
+      return App.render();
     });
   },
 
-  handleAdopt: function(event) {
-    event.preventDefault();
-
-    var petId = parseInt($(event.target).data('id'));
-
-    var adoptionInstance;
-
-    web3.eth.getAccounts(function(error, accounts) {
-      if (error) {
-        console.log(error);
-      }
-
-      var account = accounts[0];
-
-      App.contracts.Adoption.deployed().then(function(instance) {
-        adoptionInstance = instance;
-
-        // Execute adopt as a transaction by sending account
-        return adoptionInstance.adopt(petId, {from: account});
-      }).then(function(result) {
-        return App.markAdopted();
-      }).catch(function(err) {
-        console.log(err.message);
+  // Listen for events emitted from the contract
+  listenForEvents: function() {
+    App.contracts.Complaint.deployed().then(function(instance) {
+      console.log("contract event detected, rendering");
+      // Restart Chrome if you are unable to receive this event
+      // This is a known issue with Metamask
+      // https://github.com/MetaMask/metamask-extension/issues/2393
+      instance.submitEvent({}, {
+        fromBlock: 0,
+        toBlock: 'latest'
+      }).watch(function(error, event) {
+        console.log("event triggered", event)
+        // Reload when a new complaint is recorded
+        App.render();
       });
     });
-  }
+  },
 
+  // Render the application
+  render: function() {
+    var complaintInstance;
+    var loader = $("#loader");
+    var content = $("#content");
+
+    // don't show content until it has all be fetched
+    loader.show();
+    content.hide();
+
+    // Load account data
+    web3.eth.getCoinbase(function(err, account) {
+      if (err === null) {
+        App.account = account;
+        $("#accountAddress").html("Your Account: " + account);
+      }
+    });
+
+    // Load contract data
+    App.contracts.Complaint.deployed().then(function(instance) {
+      complaintInstance = instance;
+      return complaintInstance.getEntriesCount();
+    }).then(function(entriesCount) {
+
+      var entriesResults = $("#entriesResults");
+      entriesResults.empty();
+
+      var entriesSelect = $('#entriesSelect');
+      entriesSelect.empty();
+
+      currentCount = entriesCount.toNumber();
+      for (var i = 1; i <= currentCount; i++)
+      {
+        var retrievedId;
+        var retrievedName;
+        const promise1 = complaintInstance.getName(i).then(function(name)
+        {
+          retrievedName = name;
+        });
+        const promise2 = complaintInstance.getId(i).then(function(id)
+        {
+          retrievedId = id.toNumber();
+        });
+        Promise.all([promise1, promise2]).then((results) => {
+          var entryTemplate = "<tr><th>" + retrievedId + "</th><td>" + retrievedName + "</td><td>"
+          entriesResults.append(entryTemplate);
+        });
+      }
+      // Once the data has loaded show the content
+      loader.hide();
+      content.show();
+    // If the data hasn't loaded pass a warning
+    }).catch(function(error) {
+      console.warn(error);
+    });
+  },
+
+  // Submit complaint data to the contract
+  submitComplaint: function() {
+    console.log("Calling submitComplaint");
+    console.log(web3.currentProvider.selectedAddress);
+    address = userAddress = web3.currentProvider.selectedAddress;
+    var nameInput = $('#name').val();
+    App.contracts.Complaint.deployed().then(function(instance) {
+      return instance.addComplaintEntry(nameInput
+                              , 2468
+                              , 0
+                              , 3
+                              , address
+                              , 87654
+                              , "Loop break"
+                              , 3
+                              , {from: App.account });
+    }).then(function() {
+      // Wait for complaints to update
+      console.log("UPDATE COMPLAINTS");
+      $("#content").hide();
+      $("#loader").show();
+    }).catch(function(err) {
+      console.error(err);
+    });
+  }
 };
 
+// Initialize the app once the window loads
 $(function() {
   $(window).load(function() {
     App.init();

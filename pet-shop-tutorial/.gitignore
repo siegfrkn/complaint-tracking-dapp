@@ -1,0 +1,6 @@
+## Build generated
+build/
+
+# Github Generated
+.github/
+.gitattributes

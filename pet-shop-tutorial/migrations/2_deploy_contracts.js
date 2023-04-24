@@ -1,5 +1,5 @@
-var Adoption = artifacts.require("Adoption");
+var Complaint = artifacts.require("Complaint.sol");
 
 module.exports = function(deployer) {
-  deployer.deploy(Adoption);
+  deployer.deploy(Complaint);
 };

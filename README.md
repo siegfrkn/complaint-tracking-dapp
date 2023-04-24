@@ -12,3 +12,5 @@ A proof-of concept DAPP and set of corresponding API interfaces to provide an ea
 [Truffle Pet Shop Tutorial](https://trufflesuite.com/guides/pet-shop)
 
 [DApp Tutorial](https://www.dappuniversity.com/articles/the-ultimate-ethereum-dapp-tutorial)
+
+[Solidity Storage Types](https://blog.yanbman.com/solidity-storage-vs-memory-vs-calldata-8c7e8c38bce)
