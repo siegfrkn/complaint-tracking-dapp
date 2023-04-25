@@ -34,7 +34,8 @@ contract Complaint {
 
     // Constructor, initialize with some faked complaint data
     constructor () public {
-        addComplaintEntry("Complaint 1"
+        // initialize with some existing complaints
+        submitComplaintEntry("Complaint 1"
                , 0
                , 0
                , 3
@@ -43,7 +44,7 @@ contract Complaint {
                , "Disposable kit lure failure"
                , 3
                , 0);
-        addComplaintEntry("Complaint 2"
+        submitComplaintEntry("Complaint 2"
                , 123
                , 1
                , 3
@@ -52,7 +53,7 @@ contract Complaint {
                , "patient negatively impacted"
                , 4
                , 1);
-        addComplaintEntry("Complaint 3"
+        submitComplaintEntry("Complaint 3"
                , 456
                , 0
                , 6
@@ -69,7 +70,7 @@ contract Complaint {
     }
 
     // Add a complaint entry
-    function addComplaintEntry (string memory _name
+    function submitComplaintEntry (string memory _name
                      , uint _capa
                      , uint _entryType
                      , uint _product
@@ -77,13 +78,16 @@ contract Complaint {
                      , uint _site
                      , string memory _description
                      , uint _impact
-                     , int _linkedComplaint) private {
+                     , int _linkedComplaint) public {
         entriesCount++;
         complaintEntry[] storage entryList = entries[entriesCount];
         authors[_reporter];
+        // check _entryType is valid - must be 0, 1, 2
+        require(_entryType >= 0 && _entryType <= 2, "Entry Type must be 0, 1, or 2");
+        // check _impactType is valid - must be 0, 1, 2, 3, 4
+        require(_impact >= 0 && _impact <= 4, "Entry Type must be 0, 1, 2, 3, or 4");
         // check _linkedComplaint is valid
-
-        require(_linkedComplaint >= 0 && _linkedComplaint <= int(entriesCount), "Invalid Linked Complaint ID");
+        require(_linkedComplaint >= 0 && _linkedComplaint < int(entriesCount), "Invalid Linked Complaint ID");
         // add to chain
         entryList.push(complaintEntry(entriesCount
                                     , _name
@@ -96,33 +100,33 @@ contract Complaint {
                                     , _impact
                                     , _linkedComplaint));
         entriesIndex[entriesCount] = entryList.length - 1;
-    }
-
-    // Add a complaint entry with checks and trigger a submit event
-    function submitComplaintEntry (string memory _name
-                     , uint _capa
-                     , uint _entryType
-                     , uint _product
-                     , address _reporter
-                     , uint _site
-                     , string memory _description
-                     , uint _impact
-                     , int _linkedComplaint) public {
-        // check _entryType is valid
-        // check _impactType is valid
-        // add new complaint
-        addComplaintEntry (_name
-                     , _capa
-                     , _entryType
-                     , _product
-                     , _reporter
-                     , _site
-                     , _description
-                     , _impact
-                     , _linkedComplaint);
         // trigger a submit event
         emit submitEvent(_reporter);
     }
+
+    // Add a complaint entry with checks and trigger a submit event
+    // function submitComplaintEntry (string memory _name
+    //                  , uint _capa
+    //                  , uint _entryType
+    //                  , uint _product
+    //                  , address _reporter
+    //                  , uint _site
+    //                  , string memory _description
+    //                  , uint _impact
+    //                  , int _linkedComplaint) public {
+    //     // add new complaint
+    //     addComplaintEntry (_name
+    //                  , _capa
+    //                  , _entryType
+    //                  , _product
+    //                  , _reporter
+    //                  , _site
+    //                  , _description
+    //                  , _impact
+    //                  , _linkedComplaint);
+    //     // trigger a submit event
+    //     emit submitEvent(_reporter);
+    // }
 
     // Get a complaint entry with an index / id
     function getComplaint (uint complaintIndex) public view returns (complaintEntry memory) {
