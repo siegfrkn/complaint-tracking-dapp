@@ -105,6 +105,7 @@ App = {
       {
         var retrievedId;
         var retrievedName;
+        var retrievedLinkedComplaint;
         const promise1 = complaintInstance.getName(i).then(function(name)
         {
           retrievedName = name;
@@ -113,8 +114,12 @@ App = {
         {
           retrievedId = id.toNumber();
         });
-        Promise.all([promise1, promise2]).then((results) => {
-          var entryTemplate = "<tr><th>" + retrievedId + "</th><td>" + retrievedName + "</td><td>"
+        const promise3 = complaintInstance.getLinkedComplaint(i).then(function(linkedComplaint)
+        {
+          retrievedLinkedComplaint = linkedComplaint.toNumber();
+        });
+        Promise.all([promise1, promise2, promise3]).then((results) => {
+          var entryTemplate = "<tr><th>" + retrievedId + "</th><td>" + retrievedName + "</td><td>" + retrievedLinkedComplaint + "</td><td>"
           entriesResults.append(entryTemplate);
         });
       }
@@ -132,18 +137,27 @@ App = {
     console.log("Calling submitComplaint");
     var userAddress = web3.currentProvider.selectedAddress;
     console.log(userAddress);
+
+    // Get all user input
     var nameInput = $('#name').val();
+    var capaInput = $('#capa').val();
+    var entryTypeInput = $('#entryType').val();
+    var productInput = $('#product').val();
+    var siteInput = $('#site').val();
+    var descriptionInput = $('#description').val();
+    var impactInput = $('#impact').val();
+    var linkInput = $('#link').val();
     
     App.contracts.Complaint.deployed().then(function(instance) {
       return instance.submitComplaintEntry(nameInput
-                              , 2468
-                              , 0
-                              , 3
+                              , capaInput
+                              , entryTypeInput
+                              , productInput
                               , userAddress
-                              , 87654
-                              , "Loop break"
-                              , 3
-                              , 0
+                              , siteInput
+                              , descriptionInput
+                              , impactInput
+                              , linkInput
                               , {from: App.account})
     }).then(function() {
       // Wait for complaints to update
@@ -156,43 +170,83 @@ App = {
 
   // Submit complaint data to the contract
   printComplaint: function() {
+    var complaintInstance;
+    var loader = $("#loader");
+    var content = $("#content");
+
     console.log("Calling printComplaint");
+
+    // get the complaint of interest
+    var idInput = $('#printId').val();
+    if (idInput = null || idInput == "" || idInput == "0") {
+      console.log("blank idInput or zero");
+      return false;
+    }
     
     App.contracts.Complaint.deployed().then(function(instance) {
-      return instance.getName(printId, {from: App.account})
-  }).then(function(entriesCount) {
+      complaintInstance = instance;
+      return complaintInstance.getEntriesCount();
+    }).then(function(entriesCount) {
+      
     var printResults = $("#printResults");
     printResults.empty();
 
-    var printSelect = $('#entriesSelect');
+    var printSelect = $('#printSelect');
     printSelect.empty();
 
     currentCount = entriesCount.toNumber();
-    for (var i = 1; i <= currentCount; i++)
-    {
-      var retrievedId;
-      var retrievedName;
-      const promise1 = complaintInstance.getName(i).then(function(name)
+    console.log("begin comparison");
+
+    var numbersToCheck = [];
+      for (var i = 1; i <= currentCount; i++)
       {
-        retrievedName = name;
-      });
-      const promise2 = complaintInstance.getId(i).then(function(id)
-      {
-        retrievedId = id.toNumber();
-      });
-      Promise.all([promise1, promise2]).then((results) => {
-        var entryTemplate = "<tr><th>" + retrievedId + "</th><td>" + retrievedName + "</td><td>"
-        entriesResults.append(entryTemplate);
-      });
-    }
+        numbersToCheck.push(i);
+        console.log("numbersToCheck: ", numbersToCheck);
+        const promise1 = complaintInstance.getName(i).then(function(printName)
+        {
+          var thisName = printName;
+          return thisName;
+        });
+        const promise2 = complaintInstance.getId(i).then(function(printId)
+        {
+          var thisId = printId.toNumber();
+          return thisId;
+        });
+        const promise3 = complaintInstance.getLinkedComplaint(i).then(function(printLinkedComplaint)
+        {
+          var thisLinkedComplaint = printLinkedComplaint.toNumber();
+          return thisLinkedComplaint;
+        });
+        const promise4 = $('#printId').val();
+        Promise.all([promise1, promise2, promise3, promise4]).then((results) => {
+          var compareId = results[3];
+          console.log("SEARCH: ", compareId);
+          var currentName = results[0];      
+          console.log(currentName);
+          var currentId = results[1];
+          console.log(currentId);
+          var currentLinkedComplaint = results[2];
+          console.log(currentLinkedComplaint);
+          console.log(results);
+          if (compareId == currentLinkedComplaint || compareId == currentId) {
+            var printTemplate = "<tr><th>" + currentId + "</th><td>" + currentName + "</td><td>" + currentLinkedComplaint + "</td><td>"
+            console.log(printTemplate);
+            printResults.append(printTemplate);
+          }
+          else{
+            console.log("not found");
+          }
+        });
+      }
     // Once the data has loaded show the content
-    loader.hide();
-    content.show();
+    // console.log("Show the data!");
+    // loader.hide();
+    // content.show();
   // If the data hasn't loaded pass a warning      
-    }) .then(function() {
-      // Wait for complaints to update
-      $("#content").hide();
-      $("#loader").show();
+    // }) .then(function() {
+    //   // Wait for complaints to update
+    //   $("#content").show();
+    //   $("#loader").hide();
     }).catch(function(err) {
       console.error(err);
     });

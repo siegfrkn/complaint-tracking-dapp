@@ -30,23 +30,7 @@
             height: 100px;
             width: 200px;
             color: black;
-        }
-
-      /* Set width length for the left, right and middle columns */
-      /* .left {
-      width: 50%;
-      } */
-
-      /* .row:after {
-      content: "";
-      display: table;
-      clear: both;
-      } */
-
-      /* td {
-      padding: 0 15px;
-      } */
-      
+      }
       .a {
       padding: 60px;
       }
@@ -65,40 +49,42 @@
           </div>
         </div>
         <div class="row justify-content-center">
-          <div id="content" style="display: none; ">
+          <div id="content">
             <div class="column a">
               <table class="table">
+                <h3 class="text-center">Current Complaints</h3>
                 <thead>
                   <tr>
                     <th scope="col">id</th>
                     <th scope="col">Name</th>
+                    <th scope="col">LinkedComplaint</th>
                   </tr>
                 </thead>
-                <tbody id="entriesResults">
+                <tbody class="text-center" id="entriesResults">
                 </tbody>
               </table>
             </div>
             <div class="column a" style="border-left: 1px solid #ccc;">
               <form onSubmit="App.submitComplaint(); return false;">
                 <div class="form-group">
-                  <label for="entriesSelect">Submit New Complaint</label><br>
+                  <h3 class="text-center">Submit New Complaint</h3>
                   <label for="entriesSelect"></label><br>
                   <label for="name">Complaint Title:</label>
-                  <input type=""text" id="name" name="name" required minlength="1" maxlength="128" size="10"/><br>
+                  <input type=""text" id="name" name="name" required minlength="1" maxlength="128" size="15"/><br>
                   <label for="name">Linked CAPA:</label>
-                  <input type=""text" id="capa" name="capa" minlength="1" maxlength="128" size="10"/><br>
-                  <label for="name">Entry Type:</label>
-                  <input type=""text" id="entryType" name="entryType" required minlength="1" maxlength="128" size="10"/><br>
+                  <input type=""text" id="capa" name="capa" minlength="1" maxlength="128" size="6"/><br>
+                  <label for="name">Entry Type [0, 1, 2]:</label>
+                  <input type=""text" id="entryType" name="entryType" required minlength="1" maxlength="128" size="1"/><br>
                   <label for="name">Product ID:</label>
-                  <input type=""text" id="product" name="product" required minlength="1" maxlength="128" size="10"/><br>
-                  <label for="name">Complaint Site:</label>
-                  <input type=""text" id="site" name="site" required minlength="1" maxlength="128" size="10"/><br>
-                  <label for="name">Complaint Description:</label>
-                  <input type=""text" id="description" name="description" required minlength="1" maxlength="256" size="10"/><br>
-                  <label for="name">Complaint Impact:</label>
-                  <input type=""text" id="impact" name="impact" required minlength="1" maxlength="128" size="10"/><br>
-                  <label for="name">Link Complaint ID:</label>
-                  <input type=""text" id="link" name="link" minlength="1" maxlength="128" size="10"/><br>
+                  <input type=""text" id="product" name="product" required minlength="1" maxlength="128" size="6"/><br>
+                  <label for="name">Site ID:</label>
+                  <input type=""text" id="site" name="site" required minlength="1" maxlength="128" size="6"/><br>
+                  <label for="name">Description:</label>
+                  <input type=""text" id="description" name="description" required minlength="1" maxlength="256" size="20"/><br>
+                  <label for="name">Impact [0, 1, 2, 3, 4]:</label>
+                  <input type=""text" id="impact" name="impact" required minlength="1" maxlength="128" size="1"/><br>
+                  <label for="name">Linked Complaint ID:</label>
+                  <input type=""text" id="link" name="link" minlength="1" maxlength="128" size="6"/><br>
                 </div>
                 <button type="submit" class="btn btn-primary btn-sm btn-block">Submit</button>
               </form>
@@ -106,20 +92,24 @@
           </div>
       </div>
       <div class="row text-center" style="padding-top:20px; padding-bottom:20px; border-top: 1px solid #ccc;">
-        <button type="print" class="btn btn-primary" onClick="togglePrintResults(); return false;">Print Linked Complaint ID</button>
-        <input type="text" id="name" name="name" required minlength="1" maxlength="128" size="10"/><br>
-      <div class = "row justify-content-center" id="printResults">
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">id</th>
-              <th scope="col">Name</th>
-            </tr>
-          </thead>
-          <tbody id="entriesResults"></tbody>
-        </table>
+        <h3 class="text-center">Print Linked Complaints</h3>
+        <button type="print" class="btn btn-primary" onClick="togglePrintResults(); App.printComplaint(); return false;">Print Linked Complaint with ID</button>
+        <input type="text" id="printId" name="printId" required minlength="1" maxlength="128" size="10"/><br>
+        <div class = "row content-center" id="printTable">
+          <div class="column a">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">id</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">LinkedComplaint</th>
+                </tr>
+              </thead>
+              <tbody class="text-center" id="printResults"></tbody>
+            </table>
+        </div>
       </div>
-      </div>
+    </div>
       <div class="row" style="padding-top:20px; border-top: 1px solid #ccc;"></div>
         <p id="accountAddress" class="text-center"></p>
       </div>
@@ -138,6 +128,7 @@
       }
       function togglePrintResults() {
           toggler('printResults');
+
       }
   </script>
   </body>

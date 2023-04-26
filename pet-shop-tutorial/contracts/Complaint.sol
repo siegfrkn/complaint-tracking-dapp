@@ -17,7 +17,7 @@ contract Complaint {
         uint site;
         string description;
         uint impact; // 0 = observation, 1 = low, 2 = moderate, 3 = high, 4 = SAFETY
-        int linkedComplaint;
+        uint linkedComplaint;
     }
     // Store accounts that have logged complaints
     mapping(address => address) public authors;
@@ -27,7 +27,7 @@ contract Complaint {
     // Store entry count
     uint public entriesCount;
     // populate with test data
-    bool testData = true;
+    bool addingTestData = true;
 
     // submit event
     event submitEvent (
@@ -45,7 +45,7 @@ contract Complaint {
                , 12345
                , "Disposable kit lure failure"
                , 3
-               , 0);
+               , 1);
         submitComplaintEntry("Complaint 2"
                , 123
                , 1
@@ -54,7 +54,7 @@ contract Complaint {
                , 12345
                , "patient negatively impacted"
                , 4
-               , 1);
+               , 2);
         submitComplaintEntry("Complaint 3"
                , 456
                , 0
@@ -63,8 +63,8 @@ contract Complaint {
                , 78910
                , "broken pump door hinge"
                , 1
-               , 0);
-        testData = false;
+               , 2);
+        addingTestData = false;
     }
 
     // Get the current count of all complaints
@@ -81,7 +81,7 @@ contract Complaint {
                      , uint _site
                      , string memory _description
                      , uint _impact
-                     , int _linkedComplaint) public {
+                     , uint _linkedComplaint) public {
         entriesCount++;
         complaintEntry[] storage entryList = entries[entriesCount];
         authors[_reporter];
@@ -90,7 +90,7 @@ contract Complaint {
         // check _impactType is valid - must be 0, 1, 2, 3, 4
         require(_impact >= 0 && _impact <= 4, "Entry Type must be 0, 1, 2, 3, or 4");
         // check _linkedComplaint is valid
-        require(_linkedComplaint >= 0 && _linkedComplaint < int(entriesCount), "Invalid Linked Complaint ID");
+        require(_linkedComplaint >= 0 && _linkedComplaint <= entriesCount,"Invalid Linked Complaint ID");
         // add to chain
         entryList.push(complaintEntry(entriesCount
                                     , _name
@@ -103,7 +103,7 @@ contract Complaint {
                                     , _impact
                                     , _linkedComplaint));
         entriesIndex[entriesCount] = entryList.length - 1;
-        if(!testData) {
+        if(!addingTestData) {
             emit submitEvent(entriesCount);
         }
     }
@@ -128,6 +128,13 @@ contract Complaint {
         thisComplaint  = getComplaint(complaintIndex);
         returnId = thisComplaint.id;
         return thisComplaint.id;
+    }
+
+    // Get the id of a linked complaint entry with an index / id
+    function getLinkedComplaint (uint complaintIndex) public view returns (uint) {
+        complaintEntry memory thisComplaint;
+        thisComplaint  = getComplaint(complaintIndex);
+        return thisComplaint.linkedComplaint;
     }
 
     // // TODO: complete function to print all linked Entries
