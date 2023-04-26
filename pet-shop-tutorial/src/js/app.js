@@ -127,20 +127,20 @@ App = {
   // Submit complaint data to the contract
   submitComplaint: function() {
     console.log("Calling submitComplaint");
-    console.log(web3.currentProvider.selectedAddress);
-    address = userAddress = web3.currentProvider.selectedAddress;
+    var userAddress = web3.currentProvider.selectedAddress;
+    console.log(userAddress);
     var nameInput = $('#name').val();
     App.contracts.Complaint.deployed().then(function(instance) {
       return instance.submitComplaintEntry(nameInput
                               , 2468
                               , 0
                               , 3
-                              , address
+                              , userAddress
                               , 87654
                               , "Loop break"
                               , 3
                               , 0
-                              , {from: App.account });
+                              , {from: App.account});
     }).then(function() {
       // Wait for complaints to update
       console.log("UPDATE COMPLAINTS");

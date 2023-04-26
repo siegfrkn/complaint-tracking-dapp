@@ -26,10 +26,12 @@ contract Complaint {
     mapping(uint => uint) private entriesIndex;
     // Store entry count
     uint public entriesCount;
+    // populate with test data
+    bool testData = true;
 
     // submit event
     event submitEvent (
-        address who
+        uint who
     );
 
     // Constructor, initialize with some faked complaint data
@@ -62,6 +64,7 @@ contract Complaint {
                , "broken pump door hinge"
                , 1
                , 0);
+        testData = false;
     }
 
     // Get the current count of all complaints
@@ -100,33 +103,15 @@ contract Complaint {
                                     , _impact
                                     , _linkedComplaint));
         entriesIndex[entriesCount] = entryList.length - 1;
-        // trigger a submit event
-        emit submitEvent(_reporter);
+        // if(!testData) {
+        //     emit submitEvent(_reporter);
+        // }
     }
 
-    // Add a complaint entry with checks and trigger a submit event
-    // function submitComplaintEntry (string memory _name
-    //                  , uint _capa
-    //                  , uint _entryType
-    //                  , uint _product
-    //                  , address _reporter
-    //                  , uint _site
-    //                  , string memory _description
-    //                  , uint _impact
-    //                  , int _linkedComplaint) public {
-    //     // add new complaint
-    //     addComplaintEntry (_name
-    //                  , _capa
-    //                  , _entryType
-    //                  , _product
-    //                  , _reporter
-    //                  , _site
-    //                  , _description
-    //                  , _impact
-    //                  , _linkedComplaint);
-    //     // trigger a submit event
-    //     emit submitEvent(_reporter);
-    // }
+    // trigger a submit event
+    function triggerSubmitEvent (uint _reporter) public {
+        emit submitEvent(_reporter);
+    }
 
     // Get a complaint entry with an index / id
     function getComplaint (uint complaintIndex) public view returns (complaintEntry memory) {
