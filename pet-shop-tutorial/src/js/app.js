@@ -51,8 +51,8 @@ App = {
 
   // Listen for events emitted from the contract
   listenForEvents: function() {
+    console.log("contract event detected, rendering");
     App.contracts.Complaint.deployed().then(function(instance) {
-      console.log("contract event detected, rendering");
       // Restart Chrome if you are unable to receive this event
       // This is a known issue with Metamask
       // https://github.com/MetaMask/metamask-extension/issues/2393
@@ -130,6 +130,7 @@ App = {
     var userAddress = web3.currentProvider.selectedAddress;
     console.log(userAddress);
     var nameInput = $('#name').val();
+    
     App.contracts.Complaint.deployed().then(function(instance) {
       return instance.submitComplaintEntry(nameInput
                               , 2468
@@ -140,10 +141,9 @@ App = {
                               , "Loop break"
                               , 3
                               , 0
-                              , {from: App.account});
+                              , {from: App.account})
     }).then(function() {
       // Wait for complaints to update
-      console.log("UPDATE COMPLAINTS");
       $("#content").hide();
       $("#loader").show();
     }).catch(function(err) {

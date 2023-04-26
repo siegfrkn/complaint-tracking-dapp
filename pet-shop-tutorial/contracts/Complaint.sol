@@ -31,7 +31,7 @@ contract Complaint {
 
     // submit event
     event submitEvent (
-        uint who
+        uint id
     );
 
     // Constructor, initialize with some faked complaint data
@@ -103,9 +103,10 @@ contract Complaint {
                                     , _impact
                                     , _linkedComplaint));
         entriesIndex[entriesCount] = entryList.length - 1;
-        // if(!testData) {
-        //     emit submitEvent(_reporter);
-        // }
+        if(!testData) {
+            emit submitEvent(entriesCount);
+        }
+        // why does instantiating this cause 2 transactions?!
     }
 
     // trigger a submit event
