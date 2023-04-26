@@ -106,12 +106,6 @@ contract Complaint {
         if(!testData) {
             emit submitEvent(entriesCount);
         }
-        // why does instantiating this cause 2 transactions?!
-    }
-
-    // trigger a submit event
-    function triggerSubmitEvent (uint _reporter) public {
-        emit submitEvent(_reporter);
     }
 
     // Get a complaint entry with an index / id

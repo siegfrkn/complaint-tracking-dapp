@@ -13,6 +13,7 @@ App = {
   initWeb3: async function() {
     // Modern dapp browsers...
     if (window.ethereum) {
+      console.log("MODERN DAPP BROWSER");
       App.web3Provider = window.ethereum;
       try {
         // Request account access
@@ -24,10 +25,12 @@ App = {
     }
     // Legacy dapp browsers...
     else if (window.web3) {
+      console.log("LEGACY DAPP BROWSER");
       App.web3Provider = window.web3.currentProvider;
     }
     // If no injected web3 instance is detected, fall back to Ganache
     else {
+      console.log("GANACHE");
       App.web3Provider = new Web3.providers.HttpProvider('http://localhost:7545');
     }
     web3 = new Web3(App.web3Provider);
@@ -143,6 +146,50 @@ App = {
                               , 0
                               , {from: App.account})
     }).then(function() {
+      // Wait for complaints to update
+      $("#content").hide();
+      $("#loader").show();
+    }).catch(function(err) {
+      console.error(err);
+    });
+  },
+
+  // Submit complaint data to the contract
+  printComplaint: function() {
+    console.log("Calling printComplaint");
+    
+    App.contracts.Complaint.deployed().then(function(instance) {
+      return instance.getName(printId, {from: App.account})
+  }).then(function(entriesCount) {
+    var printResults = $("#printResults");
+    printResults.empty();
+
+    var printSelect = $('#entriesSelect');
+    printSelect.empty();
+
+    currentCount = entriesCount.toNumber();
+    for (var i = 1; i <= currentCount; i++)
+    {
+      var retrievedId;
+      var retrievedName;
+      const promise1 = complaintInstance.getName(i).then(function(name)
+      {
+        retrievedName = name;
+      });
+      const promise2 = complaintInstance.getId(i).then(function(id)
+      {
+        retrievedId = id.toNumber();
+      });
+      Promise.all([promise1, promise2]).then((results) => {
+        var entryTemplate = "<tr><th>" + retrievedId + "</th><td>" + retrievedName + "</td><td>"
+        entriesResults.append(entryTemplate);
+      });
+    }
+    // Once the data has loaded show the content
+    loader.hide();
+    content.show();
+  // If the data hasn't loaded pass a warning      
+    }) .then(function() {
       // Wait for complaints to update
       $("#content").hide();
       $("#loader").show();

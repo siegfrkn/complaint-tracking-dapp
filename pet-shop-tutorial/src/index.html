@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>Complaints Tracking</title>
 
@@ -16,56 +16,112 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <style media="screen">
+      {
+          box-sizing: border-box;
+      }
+      /* Set additional styling options for the columns */
+      .column {
+      float: left;
+      }
+      #printResults {
+            display: none;
+            background: white;
+            height: 100px;
+            width: 200px;
+            color: black;
+        }
+
+      /* Set width length for the left, right and middle columns */
+      /* .left {
+      width: 50%;
+      } */
+
+      /* .row:after {
+      content: "";
+      display: table;
+      clear: both;
+      } */
+
+      /* td {
+      padding: 0 15px;
+      } */
+      
+      .a {
+      padding: 60px;
+      }
+  </style>
   </head>
   <body>
-    <div class="container" style="width: 650px;">
+    <div class="container" style="width: 800px;">
+      <!-- <div class="container overflow-hidden"> -->
       <div class="row">
-        <div class="col-lg-12">
+        <!-- <div class="col-lg-12"> -->
           <h1 class="text-center">Complaints Tracking</h1>
           <hr/>
           <br/>
           <div id="loader">
             <p class="text-center">Loading...</p>
           </div>
-          <div id="content" style="display: none;">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th scope="col">id</th>
-                  <th scope="col">Name</th>
-                </tr>
-              </thead>
-              <tbody id="entriesResults">
-              </tbody>
-            </table>
-            <hr/>
-            <form onSubmit="App.submitComplaint(); return false;">
-              <div class="form-group">
-                <label for="entriesSelect">Submit New Complaint</label><br>
-                <label for="name">Complaint Title:</label>
-                <input type=""text" id="name" name="name" required minlength="1" maxlength="128" size="10"/><br>
-                <label for="name">Linked CAPA:</label>
-                <input type=""text" id="capa" name="capa" minlength="1" maxlength="128" size="10"/><br>
-                <label for="name">Entry Type:</label>
-                <input type=""text" id="entryType" name="entryType" required minlength="1" maxlength="128" size="10"/><br>
-                <label for="name">Product ID:</label>
-                <input type=""text" id="product" name="product" required minlength="1" maxlength="128" size="10"/><br>
-                <label for="name">Complaint Site:</label>
-                <input type=""text" id="site" name="site" required minlength="1" maxlength="128" size="10"/><br>
-                <label for="name">Complaint Description:</label>
-                <input type=""text" id="description" name="description" required minlength="1" maxlength="256" size="10"/><br>
-                <label for="name">Complaint Impact:</label>
-                <input type=""text" id="impact" name="impact" required minlength="1" maxlength="128" size="10"/><br>
-                <label for="name">Link Complaint ID:</label>
-                <input type=""text" id="link" name="link" minlength="1" maxlength="128" size="10"/><br>
-              </div>
-              <button type="submit" class="btn btn-primary">Submit</button>
-              <hr />
-            </form>
-            <button type="print" class="btn btn-primary">Print</button>
-            <p id="accountAddress" class="text-center"></p>
-          </div>
         </div>
+        <div class="row justify-content-center">
+          <div id="content" style="display: none; ">
+            <div class="column a">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">id</th>
+                    <th scope="col">Name</th>
+                  </tr>
+                </thead>
+                <tbody id="entriesResults">
+                </tbody>
+              </table>
+            </div>
+            <div class="column a" style="border-left: 1px solid #ccc;">
+              <form onSubmit="App.submitComplaint(); return false;">
+                <div class="form-group">
+                  <label for="entriesSelect">Submit New Complaint</label><br>
+                  <label for="entriesSelect"></label><br>
+                  <label for="name">Complaint Title:</label>
+                  <input type=""text" id="name" name="name" required minlength="1" maxlength="128" size="10"/><br>
+                  <label for="name">Linked CAPA:</label>
+                  <input type=""text" id="capa" name="capa" minlength="1" maxlength="128" size="10"/><br>
+                  <label for="name">Entry Type:</label>
+                  <input type=""text" id="entryType" name="entryType" required minlength="1" maxlength="128" size="10"/><br>
+                  <label for="name">Product ID:</label>
+                  <input type=""text" id="product" name="product" required minlength="1" maxlength="128" size="10"/><br>
+                  <label for="name">Complaint Site:</label>
+                  <input type=""text" id="site" name="site" required minlength="1" maxlength="128" size="10"/><br>
+                  <label for="name">Complaint Description:</label>
+                  <input type=""text" id="description" name="description" required minlength="1" maxlength="256" size="10"/><br>
+                  <label for="name">Complaint Impact:</label>
+                  <input type=""text" id="impact" name="impact" required minlength="1" maxlength="128" size="10"/><br>
+                  <label for="name">Link Complaint ID:</label>
+                  <input type=""text" id="link" name="link" minlength="1" maxlength="128" size="10"/><br>
+                </div>
+                <button type="submit" class="btn btn-primary btn-sm btn-block">Submit</button>
+              </form>
+            </div>
+          </div>
+      </div>
+      <div class="row text-center" style="padding-top:20px; padding-bottom:20px; border-top: 1px solid #ccc;">
+        <button type="print" class="btn btn-primary" onClick="togglePrintResults(); return false;">Print Linked Complaint ID</button>
+        <input type="text" id="name" name="name" required minlength="1" maxlength="128" size="10"/><br>
+      <div class = "row justify-content-center" id="printResults">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">id</th>
+              <th scope="col">Name</th>
+            </tr>
+          </thead>
+          <tbody id="entriesResults"></tbody>
+        </table>
+      </div>
+      </div>
+      <div class="row" style="padding-top:20px; border-top: 1px solid #ccc;"></div>
+        <p id="accountAddress" class="text-center"></p>
       </div>
     </div>
 
@@ -76,5 +132,13 @@
     <script src="js/web3.min.js"></script>
     <script src="js/truffle-contract.js"></script>
     <script src="js/app.js"></script>
+    <script> 
+      function toggler(divId) {
+          $("#" + divId).toggle();
+      }
+      function togglePrintResults() {
+          toggler('printResults');
+      }
+  </script>
   </body>
 </html>
