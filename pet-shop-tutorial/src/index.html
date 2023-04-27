@@ -95,7 +95,7 @@
       <div class="row text-center" style="padding-top:20px; padding-bottom:20px; border-top: 1px solid #ccc;">
         <h3 class="text-center">Print Linked Complaints</h3>
         <button type="print" class="btn btn-primary" onClick="togglePrintResults(); App.printComplaint(); return false;">Print Linked Complaint with ID</button>
-        <input type="text" id="printId" name="printId" required minlength="1" maxlength="128" size="10"/><br>
+        <input type="text" id="printId" name="printId" required minlength="1" maxlength="128" size="10" onClick="clearInput()"/><br>
         <div class = "row content-center" id="printTable">
           <div class="column a">
             <table class="table">
@@ -152,8 +152,13 @@
           else {
             $("#printResults").show();
           }
-
       }
+      function clearInput(){
+      var getValue= document.getElementById("printId");
+        if (getValue.value !="") {
+            getValue.value = "";
+        }
+ }
   </script>
   </body>
 </html>
