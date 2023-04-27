@@ -65,6 +65,17 @@ App = {
       }).watch(function(error, event) {
         console.log("event triggered", event)
         // Reload when a new complaint is recorded
+        // Clear all user input
+        console.log("CLEAR USER INPUT");
+        $('#name').empty();
+        $('#capa').empty();
+        $('#entryType').empty();
+        $('#product').empty();
+        $('#site').empty();
+        $('#description').empty();
+        $('#impact').empty();
+        $('#link').empty();
+        // Render the app
         App.render();
       });
     });
@@ -86,9 +97,6 @@ App = {
         App.account = account;
         $("#accountAddress").html("Your Account: " + account);
       }
-
-      var printTable = $("#printTable");
-      printTable.hide();
     });
 
     // Load contract data
@@ -102,6 +110,10 @@ App = {
 
       var entriesSelect = $('#entriesSelect');
       entriesSelect.empty();
+
+      var printTable = $("#printTable");
+      printTable.empty();
+      printTable.hide();
 
       currentCount = entriesCount.toNumber();
       for (var i = 1; i <= currentCount; i++)
@@ -163,9 +175,17 @@ App = {
                               , linkInput
                               , {from: App.account})
     }).then(function() {
+      // Clear all user input
+      // console.log("CLEAR USER INPUT");
+      // $('#name').empty();
+      // $('#capa').empty();
+      // $('#entryType').empty();
+      // $('#product').empty();
+      // $('#site').empty();
+      // $('#description').empty();
+      // $('#impact').empty();
+      // $('#link').empty();
       // Wait for complaints to update
-      nameInput.empty();
-      capaInput.empty();
       $("#content").hide();
       $("#loader").show();
     }).catch(function(err) {

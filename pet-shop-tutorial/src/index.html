@@ -86,7 +86,8 @@
                   <label for="name">Original Complaint ID:</label>
                   <input type=""text" id="link" name="link" minlength="1" maxlength="128" size="6"/><br>
                 </div>
-                <button type="submit" class="btn btn-primary btn-sm btn-block">Submit</button>
+                <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                <button type="clear" class="btn btn-primary" onClick="clearUserInput()">Clear</button>
               </form>
             </div>
           </div>
@@ -125,6 +126,19 @@
     <script> 
       function toggler(divId) {
           $("#" + divId).toggle();
+      }
+
+      function clearUserInput() {
+        document.getElementById("name").value = '';
+        document.getElementById("capa").value = '';
+        document.getElementById("entryType").value = '';
+        document.getElementById("product").value = '';
+        document.getElementById("site").value = '';
+        document.getElementById("description").value = '';
+        document.getElementById("impact").value = '';
+        document.getElementById("link").value = '';
+        document.getElementById("name").value = '';
+        document.getElementById("name").value = '';
       }
 
       function hideResults() {
