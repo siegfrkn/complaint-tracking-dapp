@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.5.0;
+pragma solidity >=0.8.19;
 pragma experimental ABIEncoderV2;
+
+import "@openzeppelin/contracts/utils/Strings.sol";
+// using Strings for uint256;
 
 contract Complaint {
     // Model a complaint
@@ -14,7 +17,7 @@ contract Complaint {
         uint site;
         string description;
         uint impact; // 0 = observation, 1 = low, 2 = moderate, 3 = high, 4 = SAFETY
-        // TODO: Add linked complaints
+        uint linkedComplaint;
     }
     // Store accounts that have logged complaints
     mapping(address => address) public authors;
@@ -23,38 +26,45 @@ contract Complaint {
     mapping(uint => uint) private entriesIndex;
     // Store entry count
     uint public entriesCount;
+    // populate with test data
+    bool addingTestData = true;
 
     // submit event
     event submitEvent (
-        address who
+        uint id
     );
 
     // Constructor, initialize with some faked complaint data
     constructor () public {
-        addComplaintEntry("Complaint 1"
+        // initialize with some existing complaints
+        submitComplaintEntry("Complaint 1"
                , 0
                , 0
                , 3
                , 0xF0b16e178270FE7E0d42dA2151ef99ba5a50b6Cc
                , 12345
                , "Disposable kit lure failure"
-               , 3);
-        addComplaintEntry("Complaint 2"
+               , 3
+               , 1);
+        submitComplaintEntry("Complaint 2"
                , 123
                , 1
                , 3
                , 0xF0b16e178270FE7E0d42dA2151ef99ba5a50b6Cc
                , 12345
                , "patient negatively impacted"
-               , 4);
-        addComplaintEntry("Complaint 3"
+               , 4
+               , 2);
+        submitComplaintEntry("Complaint 3"
                , 456
                , 0
                , 6
                , 0xA6Eed187C878Bc44E88410367508E8Ba6Bcc246a
                , 78910
                , "broken pump door hinge"
-               , 1);
+               , 1
+               , 2);
+        addingTestData = false;
     }
 
     // Get the current count of all complaints
@@ -63,17 +73,25 @@ contract Complaint {
     }
 
     // Add a complaint entry
-    function addComplaintEntry (string memory _name
+    function submitComplaintEntry (string memory _name
                      , uint _capa
                      , uint _entryType
                      , uint _product
                      , address _reporter
                      , uint _site
                      , string memory _description
-                     , uint _impact) public {
+                     , uint _impact
+                     , uint _linkedComplaint) public {
         entriesCount++;
         complaintEntry[] storage entryList = entries[entriesCount];
         authors[_reporter];
+        // check _entryType is valid - must be 0, 1, 2
+        require(_entryType >= 0 && _entryType <= 2, "Entry Type must be 0, 1, or 2");
+        // check _impactType is valid - must be 0, 1, 2, 3, 4
+        require(_impact >= 0 && _impact <= 4, "Entry Type must be 0, 1, 2, 3, or 4");
+        // check _linkedComplaint is valid
+        require(_linkedComplaint >= 0 && _linkedComplaint <= entriesCount,"Invalid Linked Complaint ID");
+        // add to chain
         entryList.push(complaintEntry(entriesCount
                                     , _name
                                     , _capa
@@ -82,30 +100,12 @@ contract Complaint {
                                     , _reporter
                                     , _site
                                     , _description
-                                    , _impact));
+                                    , _impact
+                                    , _linkedComplaint));
         entriesIndex[entriesCount] = entryList.length - 1;
-    }
-
-    // Add a complaint entry and trigger a submit event
-    function submitComplaintEntry (string memory _name
-                     , uint _capa
-                     , uint _entryType
-                     , uint _product
-                     , address _reporter
-                     , uint _site
-                     , string memory _description
-                     , uint _impact) public {
-        // add new complaint
-        addComplaintEntry (_name
-                     , _capa
-                     , _entryType
-                     , _product
-                     , _reporter
-                     , _site
-                     , _description
-                     , _impact);
-        // trigger a submit event
-        emit submitEvent(_reporter);
+        if(!addingTestData) {
+            emit submitEvent(entriesCount);
+        }
     }
 
     // Get a complaint entry with an index / id
@@ -124,15 +124,23 @@ contract Complaint {
     // Get the id of a complaint entry with an index / id
     function getId (uint complaintIndex) public view returns (uint) {
         complaintEntry memory thisComplaint;
+        uint returnId = 0;
         thisComplaint  = getComplaint(complaintIndex);
+        returnId = thisComplaint.id;
         return thisComplaint.id;
     }
 
-    // TODO: complete function to print all linked Entries
-    // function printAllEntries () public {
-    //     for (uint i = 1; i <= entriesCount; i++) {
-    //         string name = Complaint.entries[i][2];
-    //         console.log(name);
-    //     }
+    // Get the id of a linked complaint entry with an index / id
+    function getLinkedComplaint (uint complaintIndex) public view returns (uint) {
+        complaintEntry memory thisComplaint;
+        thisComplaint  = getComplaint(complaintIndex);
+        return thisComplaint.linkedComplaint;
+    }
+
+    // // TODO: complete function to print all linked Entries
+    // function retrieveEntry () public  view returns (string[2][] memory) {
+    //             complaintEntry memory thisComplaint;
+    //     thisComplaint  = getComplaint(complaintIndex);
+    //     return results;
     // }
 }

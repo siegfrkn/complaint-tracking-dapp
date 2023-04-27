@@ -1,6 +1,6 @@
 {
-  "name": "pet-shop",
-  "version": "1.0.0",
+  "name": "complaints-tracker",
+  "version": "0.0.1",
   "description": "",
   "main": "truffle.js",
   "directories": {
@@ -14,5 +14,9 @@
   "license": "ISC",
   "devDependencies": {
     "lite-server": "^2.3.0"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.8.3",
+    "solc": "^0.8.19"
   }
 }
