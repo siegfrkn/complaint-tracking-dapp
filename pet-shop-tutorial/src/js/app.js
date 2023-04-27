@@ -65,16 +65,6 @@ App = {
       }).watch(function(error, event) {
         console.log("event triggered", event)
         // Reload when a new complaint is recorded
-        // Clear all user input
-        console.log("CLEAR USER INPUT");
-        $('#name').empty();
-        $('#capa').empty();
-        $('#entryType').empty();
-        $('#product').empty();
-        $('#site').empty();
-        $('#description').empty();
-        $('#impact').empty();
-        $('#link').empty();
         // Render the app
         App.render();
       });
@@ -175,16 +165,6 @@ App = {
                               , linkInput
                               , {from: App.account})
     }).then(function() {
-      // Clear all user input
-      // console.log("CLEAR USER INPUT");
-      // $('#name').empty();
-      // $('#capa').empty();
-      // $('#entryType').empty();
-      // $('#product').empty();
-      // $('#site').empty();
-      // $('#description').empty();
-      // $('#impact').empty();
-      // $('#link').empty();
       // Wait for complaints to update
       $("#content").hide();
       $("#loader").show();
