@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Complaints Tracking</title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <!-- Additional styling -->
+    <style media="screen">
+        {
+            box-sizing: border-box;
+        }
+        .column {
+        float: left;
+        }
+        #printResults {
+        display: none;
+        background: white;
+        height: 100px;
+        width: 200px;
+        color: black;
+        }
+        .a {
+        padding: 60px;
+        }
+    </style>
+  </head>
+  <body>
+    <div class="container" style="width: 1000px;">
+      <div class="row">
+          <h1 class="text-center">Complaints Tracking</h1>
+          <hr/>
+          <br/>
+          <div id="loader">
+            <p class="text-center">Loading...</p>
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <div id="content">
+            <div class="column a">
+              <table class="table">
+                <h3 class="text-center">Current Complaints</h3>
+                <thead>
+                  <tr>
+                    <th scope="col">id</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">LinkedComplaint</th>
+                  </tr>
+                </thead>
+                <tbody class="text-center" id="entriesResults">
+                </tbody>
+              </table>
+            </div>
+            <div class="column a" style="border-left: 1px solid #ccc;">
+              <form onSubmit="App.submitComplaint(); return false;">
+                <div class="form-group">
+                  <h3 class="text-center">Submit New Complaint</h3>
+                  <label for="entriesSelect"></label><br>
+                  <label for="name">Complaint Title:</label>
+                  <input type=""text" id="name" name="name" required minlength="1" maxlength="128" size="15"/><br>
+                  <label for="name">Linked CAPA:</label>
+                  <input type=""text" id="capa" name="capa" minlength="1" maxlength="128" size="6"/><br>
+                  <label for="name">Entry Type [0, 1, 2]:</label>
+                  <input type=""text" id="entryType" name="entryType" required minlength="1" maxlength="128" size="1"/><br>
+                  <label for="name">Product ID:</label>
+                  <input type=""text" id="product" name="product" required minlength="1" maxlength="128" size="6"/><br>
+                  <label for="name">Site ID:</label>
+                  <input type=""text" id="site" name="site" required minlength="1" maxlength="128" size="6"/><br>
+                  <label for="name">Description:</label>
+                  <input type=""text" id="description" name="description" required minlength="1" maxlength="256" size="20"/><br>
+                  <label for="name">Impact [0, 1, 2, 3, 4]:</label>
+                  <input type=""text" id="impact" name="impact" required minlength="1" maxlength="128" size="1"/><br>
+                  <label for="name">Original Complaint ID:</label>
+                  <input type=""text" id="link" name="link" minlength="1" maxlength="128" size="6"/><br>
+                </div>
+                <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                <button type="clear" class="btn btn-primary btn-sm" onClick="clearUserInput()">Clear</button>
+              </form>
+            </div>
+          </div>
+      </div>
+      <div class="row text-center" style="padding-top:20px; padding-bottom:20px; border-top: 1px solid #ccc;">
+        <h3 class="text-center">Print Linked Complaints</h3>
+        <button type="print" class="btn btn-primary" onClick="togglePrintResults(); App.printComplaint(); return false;">Print Linked Complaint with ID</button>
+        <input type="text" id="printId" name="printId" required minlength="1" maxlength="128" size="10" onClick="clearInput()"/><br>
+        <div class = "row content-center" id="printTable">
+          <div class="column a">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">id</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">LinkedComplaint</th>
+                </tr>
+              </thead>
+              <tbody class="text-center" id="printResults"></tbody>
+            </table>
+        </div>
+      </div>
+    </div>
+      <div class="row" style="padding-top:20px; border-top: 1px solid #ccc;"></div>
+        <p id="accountAddress" class="text-center"></p>
+      </div>
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/web3.min.js"></script>
+    <script src="js/truffle-contract.js"></script>
+    <script src="js/app.js"></script>
+  
+    <!-- Scripts for added functionality in html -->
+    <script> 
+      <!-- Clear input from new complaint form -->
+      function clearUserInput() {
+        document.getElementById("name").value = '';
+        document.getElementById("capa").value = '';
+        document.getElementById("entryType").value = '';
+        document.getElementById("product").value = '';
+        document.getElementById("site").value = '';
+        document.getElementById("description").value = '';
+        document.getElementById("impact").value = '';
+        document.getElementById("link").value = '';
+        document.getElementById("name").value = '';
+        document.getElementById("name").value = '';
+      }
+      <!-- Toggle the show/hide for the print functionality -->
+      function togglePrintResults() {
+          if ($("#incidents printResults").is(":empty")) {
+            $("#printResults").hide();
+          }
+          else {
+            $("#printResults").show();
+          }
+      }
+      <!-- Added function to clear input for the printId -->
+      function clearInput(){
+      var getValue= document.getElementById("printId");
+        if (getValue.value !="") {
+            getValue.value = "";
+        }
+ }
+  </script>
+  </body>
+</html>

@@ -1,0 +1,9 @@
+## Build generated
+**build/
+
+## Github Generated
+.github/
+.gitattributes
+
+## Node Files
+**node_modules/
