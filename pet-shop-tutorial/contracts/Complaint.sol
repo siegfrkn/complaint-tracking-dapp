@@ -6,7 +6,10 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 // using Strings for uint256;
 
 contract Complaint {
-    // Model a complaint
+    
+    /*
+    Model a complaint
+    */
     struct complaintEntry {
         uint id;
         string name;
@@ -19,14 +22,18 @@ contract Complaint {
         uint impact; // 0 = observation, 1 = low, 2 = moderate, 3 = high, 4 = SAFETY
         uint linkedComplaint;
     }
+    
     // Store accounts that have logged complaints
-    mapping(address => address) public authors;
+    mapping(address => address) public authors; // this can probably be removed
+    
     // Store entry
     mapping(uint => complaintEntry[]) public entries;
     mapping(uint => uint) private entriesIndex;
+    
     // Store entry count
     uint public entriesCount;
-    // populate with test data
+    
+    // boolean to populate with test data
     bool addingTestData = true;
 
     // submit event
@@ -34,7 +41,9 @@ contract Complaint {
         uint id
     );
 
-    // Constructor, initialize with some faked complaint data
+    /*
+    Constructor, initialize with some faked complaint data
+    *
     constructor () public {
         // initialize with some existing complaints
         submitComplaintEntry("Complaint 1"
@@ -64,15 +73,19 @@ contract Complaint {
                , "broken pump door hinge"
                , 1
                , 2);
+        // Once test data is added flip flag to false
         addingTestData = false;
     }
 
-    // Get the current count of all complaints
+    /*
+    Get the current count of all complaints
+    */
     function getEntriesCount () public view returns (uint) {
         return entriesCount;
     }
 
-    // Add a complaint entry
+    /* Add a complaint entry
+    */
     function submitComplaintEntry (string memory _name
                      , uint _capa
                      , uint _entryType
@@ -82,16 +95,17 @@ contract Complaint {
                      , string memory _description
                      , uint _impact
                      , uint _linkedComplaint) public {
+        // Keep track of number of blocks
         entriesCount++;
         complaintEntry[] storage entryList = entries[entriesCount];
-        authors[_reporter];
-        // check _entryType is valid - must be 0, 1, 2
+        authors[_reporter]; // this can probably be removed
+        // Check _entryType is valid - must be 0, 1, 2
         require(_entryType >= 0 && _entryType <= 2, "Entry Type must be 0, 1, or 2");
-        // check _impactType is valid - must be 0, 1, 2, 3, 4
+        // Check _impactType is valid - must be 0, 1, 2, 3, 4
         require(_impact >= 0 && _impact <= 4, "Entry Type must be 0, 1, 2, 3, or 4");
-        // check _linkedComplaint is valid
+        // Check _linkedComplaint is valid
         require(_linkedComplaint >= 0 && _linkedComplaint <= entriesCount,"Invalid Linked Complaint ID");
-        // add to chain
+        // Add to chain
         entryList.push(complaintEntry(entriesCount
                                     , _name
                                     , _capa
@@ -103,25 +117,32 @@ contract Complaint {
                                     , _impact
                                     , _linkedComplaint));
         entriesIndex[entriesCount] = entryList.length - 1;
+        // If adding test data do not trigger a submitEvent
         if(!addingTestData) {
             emit submitEvent(entriesCount);
         }
     }
 
-    // Get a complaint entry with an index / id
+    /*
+    Get a complaint entry with an index / id
+    */
     function getComplaint (uint complaintIndex) public view returns (complaintEntry memory) {
         uint entryIndex = entriesIndex[complaintIndex];        
         return entries[complaintIndex][entryIndex];
     }
 
-    // Get the name of a complaint entry with an index / id
+    /*
+    Get the name of a complaint entry with an index / id
+    */
     function getName (uint complaintIndex) public view returns (string memory) {
         complaintEntry memory thisComplaint;
         thisComplaint  = getComplaint(complaintIndex);
         return thisComplaint.name;
     }
     
-    // Get the id of a complaint entry with an index / id
+    /*
+    Get the id of a complaint entry with an index / id
+    */
     function getId (uint complaintIndex) public view returns (uint) {
         complaintEntry memory thisComplaint;
         uint returnId = 0;
@@ -130,17 +151,12 @@ contract Complaint {
         return thisComplaint.id;
     }
 
-    // Get the id of a linked complaint entry with an index / id
+    /*
+    Get the id of a linked complaint entry with an index / id
+    */
     function getLinkedComplaint (uint complaintIndex) public view returns (uint) {
         complaintEntry memory thisComplaint;
         thisComplaint  = getComplaint(complaintIndex);
         return thisComplaint.linkedComplaint;
     }
-
-    // // TODO: complete function to print all linked Entries
-    // function retrieveEntry () public  view returns (string[2][] memory) {
-    //             complaintEntry memory thisComplaint;
-    //     thisComplaint  = getComplaint(complaintIndex);
-    //     return results;
-    // }
 }
