@@ -124,26 +124,28 @@ App = {
             // For all entries, populate field for current complaints
             for (var i = 1; i <= currentCount; i++)
             {
-                // Declare variables to be used
-                var retrievedId;
-                var retrievedName;
-                var retrievedLinkedComplaint;
                 // Create promises so the data can be retrieved all at once
                 const promise1 = complaintInstance.getName(i).then(function(name)
                 {
-                retrievedName = name;
+                    var thisName = name;
+                    return thisName;
                 });
                 const promise2 = complaintInstance.getId(i).then(function(id)
                 {
-                retrievedId = id.toNumber();
+                    var thisId = id.toNumber();
+                    return thisId;
                 });
                 const promise3 = complaintInstance.getLinkedComplaint(i).then(function(linkedComplaint)
                 {
-                retrievedLinkedComplaint = linkedComplaint.toNumber();
+                    var thisLinkedComplaint = linkedComplaint.toNumber();
+                    return thisLinkedComplaint;
                 });
                 // Retrieve all promises at the same time
                 Promise.all([promise1, promise2, promise3]).then((results) => {
                     // Populate the current complaints line by line
+                    var retrievedId = results[0];
+                    var retrievedName = results[1];
+                    var retrievedLinkedComplaint = results[2];
                     var entryTemplate = "<tr><th>" + retrievedId + "</th><td>" + retrievedName + "</td><td>" + retrievedLinkedComplaint + "</td><td>"
                     entriesResults.append(entryTemplate);
                 });
