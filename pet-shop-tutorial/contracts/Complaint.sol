@@ -43,7 +43,7 @@ contract Complaint {
 
     /*
     Constructor, initialize with some faked complaint data
-    *
+    */
     constructor () public {
         // initialize with some existing complaints
         submitComplaintEntry("Complaint 1"
