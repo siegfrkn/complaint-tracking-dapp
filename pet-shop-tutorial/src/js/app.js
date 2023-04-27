@@ -86,6 +86,9 @@ App = {
         App.account = account;
         $("#accountAddress").html("Your Account: " + account);
       }
+
+      var printTable = $("#printTable");
+      printTable.hide();
     });
 
     // Load contract data
@@ -161,6 +164,8 @@ App = {
                               , {from: App.account})
     }).then(function() {
       // Wait for complaints to update
+      nameInput.empty();
+      capaInput.empty();
       $("#content").hide();
       $("#loader").show();
     }).catch(function(err) {
@@ -178,9 +183,14 @@ App = {
 
     // get the complaint of interest
     var idInput = $('#printId').val();
+    var printTable = $("#printTable");
     if (idInput = null || idInput == "" || idInput == "0") {
       console.log("blank idInput or zero");
+      printTable.hide();
       return false;
+    }
+    else {
+      printTable.show();
     }
     
     App.contracts.Complaint.deployed().then(function(instance) {
@@ -193,9 +203,6 @@ App = {
 
     var printSelect = $('#printSelect');
     printSelect.empty();
-
-    currentCount = entriesCount.toNumber();
-    console.log("begin comparison");
 
     var numbersToCheck = [];
       for (var i = 1; i <= currentCount; i++)
@@ -218,7 +225,11 @@ App = {
           return thisLinkedComplaint;
         });
         const promise4 = $('#printId').val();
-        Promise.all([promise1, promise2, promise3, promise4]).then((results) => {
+        const promise5 = complaintInstance.getEntriesCount().then(function(count) {
+          var thisCount = count;
+          return thisCount;
+        });
+        Promise.all([promise1, promise2, promise3, promise4, promise5]).then((results) => {
           var compareId = results[3];
           console.log("SEARCH: ", compareId);
           var currentName = results[0];      
@@ -228,6 +239,13 @@ App = {
           var currentLinkedComplaint = results[2];
           console.log(currentLinkedComplaint);
           console.log(results);
+          var currentCount = entriesCount;
+          // sanitzie input to search
+          if (compareId > currentCount) {
+            console.log("Linked complaint id does not exist.")
+            printTable.hide();
+            return false;
+          }
           if (compareId == currentLinkedComplaint || compareId == currentId) {
             var printTemplate = "<tr><th>" + currentId + "</th><td>" + currentName + "</td><td>" + currentLinkedComplaint + "</td><td>"
             console.log(printTemplate);
@@ -238,15 +256,6 @@ App = {
           }
         });
       }
-    // Once the data has loaded show the content
-    // console.log("Show the data!");
-    // loader.hide();
-    // content.show();
-  // If the data hasn't loaded pass a warning      
-    // }) .then(function() {
-    //   // Wait for complaints to update
-    //   $("#content").show();
-    //   $("#loader").hide();
     }).catch(function(err) {
       console.error(err);
     });

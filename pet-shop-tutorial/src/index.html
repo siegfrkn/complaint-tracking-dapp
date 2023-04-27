@@ -83,7 +83,7 @@
                   <input type=""text" id="description" name="description" required minlength="1" maxlength="256" size="20"/><br>
                   <label for="name">Impact [0, 1, 2, 3, 4]:</label>
                   <input type=""text" id="impact" name="impact" required minlength="1" maxlength="128" size="1"/><br>
-                  <label for="name">Linked Complaint ID:</label>
+                  <label for="name">Original Complaint ID:</label>
                   <input type=""text" id="link" name="link" minlength="1" maxlength="128" size="6"/><br>
                 </div>
                 <button type="submit" class="btn btn-primary btn-sm btn-block">Submit</button>
@@ -126,8 +126,18 @@
       function toggler(divId) {
           $("#" + divId).toggle();
       }
+
+      function hideResults() {
+        $("#printResults").hide();
+      }
       function togglePrintResults() {
-          toggler('printResults');
+          // toggler('printResults');
+          if ($("#incidents printResults").is(":empty")) {
+            $("#printResults").hide();
+          }
+          else {
+            $("#printResults").show();
+          }
 
       }
   </script>
