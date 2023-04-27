@@ -22,10 +22,7 @@ contract Complaint {
         uint impact; // 0 = observation, 1 = low, 2 = moderate, 3 = high, 4 = SAFETY
         uint linkedComplaint;
     }
-    
-    // Store accounts that have logged complaints
-    mapping(address => address) public authors; // this can probably be removed
-    
+
     // Store entry
     mapping(uint => complaintEntry[]) public entries;
     mapping(uint => uint) private entriesIndex;
@@ -99,7 +96,6 @@ contract Complaint {
         // Keep track of number of blocks
         entriesCount++;
         complaintEntry[] storage entryList = entries[entriesCount];
-        authors[_reporter]; // this can probably be removed
         // Check _entryType is valid - must be 0, 1, 2
         require(_entryType >= 0 && _entryType <= 2, "Entry Type must be 0, 1, or 2");
         // Check _impactType is valid - must be 0, 1, 2, 3, 4
