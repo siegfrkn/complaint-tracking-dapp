@@ -84,7 +84,8 @@ contract Complaint {
         return entriesCount;
     }
 
-    /* Add a complaint entry
+    /*
+    Add a complaint entry
     */
     function submitComplaintEntry (string memory _name
                      , uint _capa
