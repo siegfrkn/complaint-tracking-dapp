@@ -29,7 +29,6 @@ The following deliverables will be produced in support of the project objective.
 * Github projects board to track the work throughout the duration of this project as well as future enhancements which were not able to be completed within the scope of this course
 * Software bill of materials (BOM) outlining which open-source tools are consumed
 * Proof-of-concept blockchain dApp, level of functionality will be scaled time-permitting
-* Time permitting, a set of API's for common consuming programs of consumer medical device complaints such as Windchill, Salesforce, SAP
 * Public Github repository hosting all content listed above
 
 ### Timeline
@@ -46,20 +45,15 @@ The following deliverables will be produced in support of the project objective.
 * Week 11 - 2023-04-03
   * Design document to map blockchain architecture to compliance
   * Proof-of-concept blockchain dApp, begin
-  * Engage class discord to review contract code segment
 * Week 12 - 2023-04-09
   * Design document to map blockchain architecture to compliance, complete
   * Proof-of-concept blockchain dApp
-  * Set up check-in with professors
 * Week 13 - 2023-04-16
   * Proof-of-concept blockchain dApp
-  * API's (time permitting)
 * Week 14 - 2023-04-23
   * Proof-of-concept blockchain dApp, code complete / wrap up at stopping point
-  * Presentation
   * Complete all deliverables
 * Week 15 - 2023-04-30
-  * Presentation in class
   * Project due
 
 ## Unknowns and Risks
