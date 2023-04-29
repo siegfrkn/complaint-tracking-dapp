@@ -1,16 +1,8 @@
 # complaint-tracking-dapp
 A proof-of concept DAPP and set of corresponding API interfaces to provide an easy-to-use distributed ledger of complaint handling which serves as a single stream of records that can provide an audit trail. 
 
-## Resources
+![Application Screenshot](application-screenshot.PNG "Application Screenshot")
 
-[Truffle and Ganache on WSL2](https://qiita.com/daei/items/84c55dbe03ebb81da162)
-
-[Launching Browser in WSL2](https://superuser.com/questions/1262977/open-browser-in-host-system-from-windows-subsystem-for-linux)
-
-[Linking Metamask and Ganache](https://medium.com/@girishkathirdy/my-set-up-guide-metamask-and-ganache-da11eaa3b4d5)
-
-[Truffle Pet Shop Tutorial](https://trufflesuite.com/guides/pet-shop)
-
-[DApp Tutorial](https://www.dappuniversity.com/articles/the-ultimate-ethereum-dapp-tutorial)
-
-[Solidity Storage Types](https://blog.yanbman.com/solidity-storage-vs-memory-vs-calldata-8c7e8c38bce)
+## Content
+![Directory Structure](complaint-dapp-structure.png "Directory Structure")
+This directory is structured as indicated above. All code needed to clone and run this project, as well as information about system dependencies can be found in the `complaint-tracker` directory. The original project proposal can be found in the `project proposal` directory, and all files related to the final report are located in the `final report` directory.
