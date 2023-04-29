@@ -51,7 +51,7 @@ contract Complaint {
                , 12345
                , "Disposable kit lure failure"
                , 3
-               , 1);
+               , 0);
         submitComplaintEntry("Complaint 2"
                , 123
                , 1
@@ -60,7 +60,7 @@ contract Complaint {
                , 12345
                , "Patient negatively impacted"
                , 4
-               , 2);
+               , 0);
         submitComplaintEntry("Complaint 3"
                , 456
                , 0
@@ -82,12 +82,12 @@ contract Complaint {
         submitComplaintEntry("Complaint 5"
                , 789
                , 1
-               , 4
+               , 3
                , 0xf286071b12282868f18B744788FeF443D1Cb3F56
                , 98754
                , "Crimped tubing"
                , 2
-               , 0);
+               , 1);
         // Once test data is added flip flag to false
         addingTestData = false;
     }
