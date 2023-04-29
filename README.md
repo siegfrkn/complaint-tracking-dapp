@@ -4,7 +4,7 @@ A proof-of concept dApp and set of corresponding API interfaces to provide an ea
 ![Application Screenshot](readme-images/application-screenshot.PNG "Application Screenshot") <br/><br/>
 
 # Repository Content
-![Directory Structure](readme-images/complaint-dApp-structure.png "Directory Structure")
+![Directory Structure](readme-images/complaint-dapp-structure.png "Directory Structure")
 This directory is structured as indicated above. All code needed to clone and run this project, as well as information about system dependencies can be found in the `complaint-tracker` directory. The original project proposal can be found in the `project-proposal` directory, and all files related to the final report are located in the `final-report` directory. <br/><br/>
 
 
