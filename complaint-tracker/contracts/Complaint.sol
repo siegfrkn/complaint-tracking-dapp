@@ -35,7 +35,7 @@ contract Complaint {
 
     // submit event
     event submitEvent (
-        uint id
+        string _name
     );
 
     /*
@@ -58,7 +58,7 @@ contract Complaint {
                , 3
                , 0xF0b16e178270FE7E0d42dA2151ef99ba5a50b6Cc
                , 12345
-               , "patient negatively impacted"
+               , "Patient negatively impacted"
                , 4
                , 2);
         submitComplaintEntry("Complaint 3"
@@ -67,9 +67,27 @@ contract Complaint {
                , 6
                , 0xA6Eed187C878Bc44E88410367508E8Ba6Bcc246a
                , 78910
-               , "broken pump door hinge"
+               , "Broken pump door hinge"
                , 1
                , 2);
+        submitComplaintEntry("Complaint 4"
+               , 456
+               , 0
+               , 6
+               , 0xA6Eed187C878Bc44E88410367508E8Ba6Bcc246a
+               , 78910
+               , "Pump door screws backed out"
+               , 2
+               , 2);
+        submitComplaintEntry("Complaint 5"
+               , 789
+               , 1
+               , 4
+               , 0xf286071b12282868f18B744788FeF443D1Cb3F56
+               , 98754
+               , "Crimped tubing"
+               , 2
+               , 0);
         // Once test data is added flip flag to false
         addingTestData = false;
     }
@@ -79,6 +97,13 @@ contract Complaint {
     */
     function getEntriesCount () public view returns (uint) {
         return entriesCount;
+    }
+
+    /*
+    Get the current status of the flag controlling addition of test data
+    */
+    function getAddingTestData () public view returns (bool) {
+        return addingTestData;
     }
 
     /*
@@ -116,7 +141,7 @@ contract Complaint {
         entriesIndex[entriesCount] = entryList.length - 1;
         // If adding test data do not trigger a submitEvent
         if(!addingTestData) {
-            emit submitEvent(entriesCount);
+            emit submitEvent(_name);
         }
     }
 
@@ -142,9 +167,7 @@ contract Complaint {
     */
     function getId (uint complaintIndex) public view returns (uint) {
         complaintEntry memory thisComplaint;
-        uint returnId = 0;
         thisComplaint  = getComplaint(complaintIndex);
-        returnId = thisComplaint.id;
         return thisComplaint.id;
     }
 
@@ -156,4 +179,14 @@ contract Complaint {
         thisComplaint  = getComplaint(complaintIndex);
         return thisComplaint.linkedComplaint;
     }
+
+    /*
+    Get a entry type with an index / id
+    */
+    function getEntryType (uint complaintIndex) public view returns (uint) {
+        complaintEntry memory thisComplaint;
+        thisComplaint  = getComplaint(complaintIndex);
+        return thisComplaint.entryType;
+    }
+
 }
