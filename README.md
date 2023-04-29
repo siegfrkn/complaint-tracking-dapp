@@ -11,7 +11,7 @@ This directory is structured as indicated above. All code needed to clone and ru
 # Contract Structure
 The contract, named *Complaint*, is made up of a a series of complaint entries and containers and objects to store and keep track of those entries.
 <br/><br/>
-![Constract Structure](readme-images/contract-structure.PNG "Contract Structure") <br/><br/>
+![Contract Structure](readme-images/contract-structure.PNG "Contract Structure") <br/><br/>
 
 - *complaintEntry* - a custom struct that models the characteristics of the complaints, where each complaint will be its own block in the chain
 - *entries* a mapping of arrays of complaintEntries to uint keys to keep track of the complaints
@@ -55,7 +55,7 @@ Very complete tutorials have already been created that describe the steps needed
 ## Launching the dApp
 Once the contract has been built and migrated, the application can be launched. If not already logged into MetaMask, log in and import  on of the example accounts from your Ganache instance using the associated private key. Upon successful launching of the application, you'll see the following.
 
-![dApp in Use](readme-images/dApp-in-use.PNG "dApp in Use") <br/>
+![dApp in Use](dapp-in-use.PNG "dApp in Use") <br/>
 
 ## Your Account
 At the bottom of the screen you will see your account address that is currently in use by the MetaMask extension for connection to this application.
@@ -80,15 +80,15 @@ When the dApp is launched, you can request the linked complaints be returned as 
 ## Submitting a New Complaint
 On the right hand side of the screen is a form to submit a new complaint. If you enter information and hit submit, the contract will check if the entry is valid - i.e. valid entry type, impact type, and linked complaint (if applicable) - before adding it to the chain. If you enter the following dummy data...
 
-![Submit New Complaint](readme-images/submit-new-example.PNG "Submit New Complaint") <br/>
+![Submit New Complaint](readme-images/submit-new-example.png "Submit New Complaint") <br/>
 
 You'll see that your MetaMask extension will prompt you for a transaction confirmation. Click 'Submit' to allow the transaction to complete.
 
-![MetaMast Transaction](readme-images/metamask-transaction.PNG "MetaMask Transaction") <br/>
+![MetaMast Transaction](readme-images/metamask-transaction.png "MetaMask Transaction") <br/>
 
 Upon completion the screen will refresh and you'll now see Complaint 6 has been added to the list of current complaints, with block id 6 and linked complaint 1.
 
-![New Complaint Added](readme-images/new-complaint-added.PNG "New Complaint Added") <br/><br/>
+![New Complaint Added](readme-images/new-complaint-added.png "New Complaint Added") <br/><br/>
 
 # Testing the dApp
 A test for all functions in the contract is in the test subdirectory of the dApp. It uses both the existing example data as well as some new data. Recall the original example data populates when you run the contract.
