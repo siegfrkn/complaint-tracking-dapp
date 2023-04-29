@@ -88,8 +88,55 @@ You'll see that your MetaMask extension will prompt you for a transaction confir
 
 Upon completion the screen will refresh and you'll now see Complaint 6 has been added to the list of current complaints, with block id 6 and linked complaint 1.
 
-![New Complaint Added](new-complaint-added.PNG "New Complaint Added") <br/>
+![New Complaint Added](new-complaint-added.PNG "New Complaint Added") <br/><br/>
 
+# Testing the dApp
+A test for all functions in the contract is in the test subdirectory of the dApp. It uses both the existing example data as well as some new data. Recall the original example data populates when you run the contract.
+
+![Example Data](example-data.PNG "Example Data") <br/>
+
+## Test 1 - Correct Example Data is Generated
+The first test deploys the contract and verifies that the contract initializes with five block entries, one for each complaint.
+
+## Test 2 - Correct Parameters for Test Data
+This test verifies that each of the 10 parameters for the five example complaints populated as expected on the chain.
+
+## Test 3 - Emit Events Don't Occur Until After Test Data Populates
+The test data uses a flag called *addingTestData* to indicate if the addition of test data is occuring, it is initialized to true. If *addingTestData* is true, no emit events that would trigger a refresh of the dApp will occur when a complaint is adding. After all five example complaints are added in the constructor, this flag flips to false. This test verifies that after the test is deployed, the flag toggles to false.
+
+## Test 4 - A New Complaint Can Be Submitted
+This test creates a new example complaint, Complaint 6, and verifies it can be added to the chain and emits a refresh-triggering event for the dApp.
+
+## Test 5 - A Valid Entry Type Is Required To Submit A Complaint
+Any new complaint submission must have a valid entry type. Recall the mappings are:
+- 0 = New Complaint
+- 1 = Addendum to Existing
+- 2 = Complaint Closure
+If a new test submission, Complaint 7, does not have a valid entry type (e.g. entryType = 3), verify that the complaint is not added to the chain.
+
+## Test 6 - A Valid Impact Type Is Required To Submit A Complaint
+Any new complaint submission must have a valid impact type. Recall the mappings are:
+- 0 = Observation
+- 1 = Low
+- 2 = Moderate
+- 3 = High
+- 4 = SAFETY
+If a new test submission, Complaint 7, does not have a valid impact type (e.g. impactType = 5), verify that the complaint is not added to the chain.
+
+## Test 7 - A Valid Linked Complaint Is Required to Submit A Complaint
+Any new complaint submission must have a valid linked complaint or no linked complaing. The conditions are:
+- Linked complaint must exist on the chain
+- If no linked complaint set to 0
+This test demonstrates that if an invalid linked complaint is passed in a new submission, such as a linked complaint id of 1 + current block length, it is not added to the chain.
+
+## Test 8 - A Complaint Name Can Be Retrieved Given An Index
+This test verifies that if passed a valid block index, the corresponding complaint name can be returned.
+
+## Test 9 - A Complaint ID Can Be Retrieved Given An Index
+This test verifies that if passed a valid block index, the corresponding complaint ID can be returned.
+
+## Test 10 - A Complaint's Linked Complaint ID Can Be Retrieved Given An Index
+This test verifies that if passed a valid block index, the corresponding complaint's linked complaint ID can be returned.
 
 <br/>
 

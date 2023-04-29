@@ -82,7 +82,7 @@ contract("Complaint", function(accounts){
             assert.equal(entry[6], 12345, "Complaint 1 contains the correct site");
             assert.equal(entry[7], "Disposable kit lure failure", "Complaint 1 contains the correct description");
             assert.equal(entry[8], 3, "Complaint 1 contains the correct impact");
-            assert.equal(entry[9], 1, "Complaint 1 contains the correct linked complaint");
+            assert.equal(entry[9], 0, "Complaint 1 contains the correct linked complaint");
             return entryInstance.getComplaint(2);
         }).then(function(entry) {
             assert.equal(entry[0], 2, "Complaint 2 contains the correct id");
@@ -94,7 +94,7 @@ contract("Complaint", function(accounts){
             assert.equal(entry[6], 12345, "Complaint 2 contains the correct site");
             assert.equal(entry[7], "Patient negatively impacted", "Complaint 2 contains the correct description");
             assert.equal(entry[8], 4, "Complaint 2 contains the correct impact");
-            assert.equal(entry[9], 2, "Complaint 2 contains the correct linked complaint");
+            assert.equal(entry[9], 0, "Complaint 2 contains the correct linked complaint");
             return entryInstance.getComplaint(3);
         }).then(function(entry) {
             assert.equal(entry[0], 3, "Complaint 3 contains the correct id");
@@ -125,12 +125,12 @@ contract("Complaint", function(accounts){
             assert.equal(entry[1], "Complaint 5", "Complaint 5 contains the correct name");
             assert.equal(entry[2], 789, "Complaint 5 contains the correct CAPA indicator");
             assert.equal(entry[3], 1, "Complaint 5 contains the correct entry type");
-            assert.equal(entry[4], 4, "Complaint 5 contains the correct product");
+            assert.equal(entry[4], 3, "Complaint 5 contains the correct product");
             assert.equal(entry[5], 0xf286071b12282868f18B744788FeF443D1Cb3F56, "Complaint 5 contains the correct reporter address");
             assert.equal(entry[6], 98754, "Complaint 5 contains the correct site");
             assert.equal(entry[7], "Crimped tubing", "Complaint 5 contains the correct description");
             assert.equal(entry[8], 2, "Complaint 5 contains the correct impact");
-            assert.equal(entry[9], 0, "Complaint 5 contains the correct linked complaint");
+            assert.equal(entry[9], 1, "Complaint 5 contains the correct linked complaint");
         });
     });
 
