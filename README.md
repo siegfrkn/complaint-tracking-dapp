@@ -55,7 +55,7 @@ Very complete tutorials have already been created that describe the steps needed
 ## Launching the dApp
 Once the contract has been built and migrated, the application can be launched. If not already logged into MetaMask, log in and import  on of the example accounts from your Ganache instance using the associated private key. Upon successful launching of the application, you'll see the following.
 
-![dApp in Use](dapp-in-use.PNG "dApp in Use") <br/>
+![dApp in Use](readme-images/dapp-in-use.PNG "dApp in Use") <br/>
 
 ## Your Account
 At the bottom of the screen you will see your account address that is currently in use by the MetaMask extension for connection to this application.
