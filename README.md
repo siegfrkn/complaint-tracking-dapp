@@ -5,7 +5,7 @@ A proof-of concept dApp and set of corresponding API interfaces to provide an ea
 
 # Repository Content
 ![Directory Structure](complaint-dApp-structure.png "Directory Structure")
-This directory is structured as indicated above. All code needed to clone and run this project, as well as information about system dependencies can be found in the `complaint-tracker` directory. The original project proposal can be found in the `project proposal` directory, and all files related to the final report are located in the `final report` directory. <br/><br/>
+This directory is structured as indicated above. All code needed to clone and run this project, as well as information about system dependencies can be found in the `complaint-tracker` directory. The original project proposal can be found in the `project-proposal` directory, and all files related to the final report are located in the `final-report` directory. <br/><br/>
 
 
 # Contract Structure
