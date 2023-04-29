@@ -24,13 +24,12 @@ The objective of this project is to provide a proof-of-concept for an open-sourc
 The following deliverables will be produced in support of the project objective.
 * Project proposal
 * List of product level (PRD) and lower level (LLR) software requirements
-* Architectural document outlining the dApp design
+* Architectural documentation outlining the dApp design
 * Design document (white paper) outlining how the blockchain and dApp architecture serve to meet the requirements for the FDA regulation 21 CFR 820.198
 * Github projects board to track the work throughout the duration of this project as well as future enhancements which were not able to be completed within the scope of this course
 * Software bill of materials (BOM) outlining which open-source tools are consumed
 * Proof-of-concept blockchain dApp, level of functionality will be scaled time-permitting
 * Time permitting, a set of API's for common consuming programs of consumer medical device complaints such as Windchill, Salesforce, SAP
-* Presentation for end of semester
 * Public Github repository hosting all content listed above
 
 ### Timeline
