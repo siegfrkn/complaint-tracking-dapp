@@ -9,6 +9,23 @@ A video demo of the app in use can be found [here](https://youtu.be/OHjU2jsOnWc)
 ![Directory Structure](readme-images/complaint-dapp-structure.png "Directory Structure")
 This directory is structured as indicated above. All code needed to clone and run this project, as well as information about system dependencies can be found in the `complaint-tracker` directory. The original project proposal can be found in the `project-proposal` directory, and all files related to the final report are located in the `final-report` directory. <br/><br/>
 
+# Contract and App Requirements
+To ensure the dApp meets the needs of FDA 21 CFR 820.198 which outlines the regulations for medical device complaint tracking, the following requirements have been outline.
+* All complaints must be stored indefinitely and are subject to audit.
+* All complaint initial filings, addendums, and closures shall be be documented.
+* Complaints in the system shall contain the following information at minimum:
+  * Summary (Title)
+  * Description
+  * Site of complaint
+  * Severity
+  * Corrective action (if applicable)
+  * Product
+* The system shall allow linking of complaints, addendums, and closures.
+* The system shall allow retrieval of a complaint given an ID.
+* The system shall allow retrieval of all linked complaints given a complaint ID.
+* Complaint records should be protected from modification after the initial filing.
+* The system shall be designed such that the complaint records are stored redundantly to prevent data loss.
+<br/><br/>
 
 # Contract Structure
 The contract, named *Complaint*, is made up of a a series of complaint entries and containers and objects to store and keep track of those entries.
