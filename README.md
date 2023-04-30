@@ -27,6 +27,36 @@ To ensure the dApp meets the needs of FDA 21 CFR 820.198 which outlines the regu
 * The system shall be designed such that the complaint records are stored redundantly to prevent data loss.
 <br/><br/>
 
+# dApp Architecture
+![dApp Architecture](readme-images/dapp-architecture.png "dApp Architecture")
+## Truffle Suite
+The complaint tracking dApp was deveoped using tools from the Truffle Suite. [Truffle](https://trufflesuite.com/_) is a suite of tools for smart contract development, including what it calls "[truffle boxes](https://trufflesuite.com/boxes/)" which are helpful boilerplates for writing your own dApp's.
+
+## dApp Components
+The dApp has three primary components - the Ethereum blockchain, the web3 interface, and the client side of the application.
+
+### Ethereum Blockchain
+The Ethereum Blockchain makes up the "back end" of the dApp. 
+#### *Local Blockchain*
+In this proof-of-concept a local Ethereum blockchain is generated and hosted by the [Ganache](https://trufflesuite.com/ganache/) dev application which is run locally.
+#### *Contract Code*
+The contract was written in the [Solidity](https://soliditylang.org/_) language which is "a statically-typed curly-braces programming language designed for developing smart contracts that run on Ethereum." It was written and deployed using the [Truffle](https://trufflesuite.com/_) framework which simplifies and expedites development.
+#### *Contract Unit Testing*
+Contract unit testing was done in [JavaScript](https://www.javascript.com/) using the [Mocha](https://mochajs.org/) testing framework. Unit testing of ethereum contract code is critical to ensure proper functionality of the contract prior to deployment, as it cannot easily be changed post-deployment without migration, which, for large networks can be logistically complex.
+
+### Web3 Interface
+The web3 interface connects the backend of the blockchain to the front client-facing end.
+#### *Browser Tools*
+Both [Google Chrome](https://www.google.com/chrome/) and the [Google Chrome Extension](https://sites.google.com/coinsloginn.com/metamaskcromeextension/home?pli=1) for [MetaMask](https://metamask.io/) are used to facilitate connecting the user to the locally hosted blockchain.
+#### *Web3 Interfacing*
+The actual code to connect the browser tools to both the local blockchain and the user was done using [Web3.js](https://web3js.org/#/) which is a [JavaScript](https://www.javascript.com/) library for building on Ethereum.
+
+### Client Side
+The client side of the dApp is what the user actually interacts with. It is composed of the user themselves and the front-end of the dApp which was written using HTML5 and CSS.
+
+
+<br/>
+
 # Contract Structure
 The contract, named *Complaint*, is made up of a a series of complaint entries and containers and objects to store and keep track of those entries.
 <br/><br/>
