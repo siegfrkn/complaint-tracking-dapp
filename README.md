@@ -10,7 +10,7 @@ A video demo of the app in use can be found [here](https://youtu.be/OHjU2jsOnWc)
 This directory is structured as indicated above. All code needed to clone and run this project, as well as information about system dependencies can be found in the `complaint-tracker` directory. The original project proposal can be found in the `project-proposal` directory, and all files related to the final report are located in the `final-report` directory. There is an additional directory named `readme-images` which contains the images used in the various readme files throughout this repo. <br/><br/>
 
 # Contract and App Requirements
-To ensure the dApp meets the needs of FDA 21 CFR 820.198 which outlines the regulations for medical device complaint tracking, the following requirements have been outline.
+To ensure the dApp meets the needs of FDA 21 CFR 820.198 which outlines the regulations for medical device complaint tracking, the following requirements have been outlined.
 * All complaints must be stored indefinitely and are subject to audit.
 * All complaint initial filings, addendums, and closures shall be be documented.
 * Complaints in the system shall contain the following information at minimum:
@@ -70,7 +70,7 @@ The contract, named *Complaint*, is made up of a a series of complaint entries a
 Additionally there is a *submitEvent* event object used to trigger refreshes on the application.
 
 ## Complaint Entries <br/>
-The contract entries are structured as shown above and detailed below. While only the Name, ID, and LinkedComplaint characteristics are relevant for user interaction, the other characteristics have been created to demonstrate the use case for tracking medical complaints.Additionally, some of the "extra" characteristics are used to ensure entries are valid.
+The contract entries are structured as shown above and detailed below. While only the Name, ID, and LinkedComplaint characteristics are relevant for user interaction, the other characteristics have been created to demonstrate the use case for tracking medical complaints. Additionally, some of the "extra" characteristics are used to ensure entries are valid.
 
 - *id* - a unique identifier for the complaint which also matches its block ID on the chain.
 - *name* - the user-given name of the complaint.
