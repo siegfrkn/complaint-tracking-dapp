@@ -67,7 +67,7 @@ The contract, named *Complaint*, is made up of a a series of complaint entries a
 - *entriesIndex* - a mapping of uints to uints to keep track of an entry's position on the block so that it may easily be retrieved
 - *entriesCount* - a numeric count of the number of blocks in the chain
 
-Additionall there is a *submitEvent* event object used to trigger refreshes on the application.
+Additionally there is a *submitEvent* event object used to trigger refreshes on the application.
 
 ## Complaint Entries <br/>
 The contract entries are structured as shown above and detailed below. While only the Name, ID, and LinkedComplaint characteristics are relevant for user interaction, the other characteristics have been created to demonstrate the use case for tracking medical complaints.Additionally, some of the "extra" characteristics are used to ensure entries are valid.
