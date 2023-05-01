@@ -12,7 +12,7 @@ This directory is structured as indicated above. All code needed to clone and ru
 # Contract and App Requirements
 To ensure the dApp meets the needs of FDA 21 CFR 820.198 which outlines the regulations for medical device complaint tracking, the following requirements have been outlined.
 * All complaints must be stored indefinitely and are subject to audit.
-* All complaint initial filings, addendums, and closures shall be be documented.
+* All complaint initial filings, addendums, and closures shall be documented.
 * Complaints in the system shall contain the following information at minimum:
   * Summary (Title)
   * Description
@@ -58,7 +58,7 @@ The client side of the dApp is what the user actually interacts with. It is comp
 <br/>
 
 # Contract Structure
-The contract, named *Complaint*, is made up of a a series of complaint entries and containers and objects to store and keep track of those entries.
+The contract, named *Complaint*, is made up of a series of complaint entries and containers and objects to store and keep track of those entries.
 <br/><br/>
 ![Contract Structure](readme-images/contract-structure.PNG "Contract Structure") <br/><br/>
 
@@ -90,7 +90,7 @@ The contract functions are shown in the image above. They are used to instantiat
 - *getEntriesCount()* - returns the number of blocks on the chain.
 - *getAddingTestData()* - returns the value of the boolean *addingTestData* which is used to prevent refresh-triggering events when populating the contract with test data.
 - *getComplaint()* - given a block id (i.e. complaint id) it returns a complaintEntry object.
-- *getName()* - given a block id (i.e. complaint id) it returns the name assocaited with that complaint entry.
+- *getName()* - given a block id (i.e. complaint id) it returns the name associated with that complaint entry.
 - *getId()* - given a block id (i.e. complaint id) it returns the id associated with that complaint entry.
 - *getLinkedComplaint()* - given a block id (i.e. complaint id) it returns the id of a linked complaint for that complaint entry if it exists.
 - *getEntryType()* - given a block id (i.e. complaint id) it returns the entry type of the complaint entry.
